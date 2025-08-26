@@ -23,4 +23,16 @@ public class AuthController {
         userDetails.setPassword(passwordEncoder.encode(userDetails.getPassword()));
         authService.registerUser(userDetails);
     }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestBody UserEntity user)
+    {
+        return authService.loginUser(user);
+    }
+
+    @GetMapping("/verify")
+    public String verify()
+    {
+        return "Success";
+    }
 }
