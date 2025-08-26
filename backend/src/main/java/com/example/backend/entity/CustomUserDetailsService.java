@@ -1,0 +1,33 @@
+package com.example.backend.entity;
+
+import com.example.backend.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+
+@Component
+public class CustomUserDetailsService implements UserDetailsService {
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user=userRepository.findByUsername(username);
+
+        if(user==null)
+        {
+            throw new UsernameNotFoundException("User Not Found");
+        }
+
+        return new User(user.getUsername(),user.getPassword(),
+                Collections.singleton(new SimpleGrantedAuthority("USER")));
+
+    }
+}

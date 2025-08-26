@@ -1,17 +1,51 @@
-import React from "react";
+import React, { useState } from "react";
 import {useNavigate} from "react-router-dom";
+import { registerUser } from "./Services/Service";
 
 const Register = () => {
 
-    const navigate = useNavigate();
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Register form submitted");
-        alert("Successfully Registered :)!");
-        navigate("/");
+    const [formData, setFormData] = useState(
+        {
+            username:"",
+            email: "",
+            password: "",
+            confirmPassword: ""
+        }
+    );
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
     };
 
+    const navigate = useNavigate();
 
+    const handleSubmit = (e) => {
+
+        e.preventDefault();
+        if(validateForm())
+        {
+            registerUser(formData);
+            console.log("Register form submitted");
+            alert("Successfully Registered :)!");
+            navigate("/");
+        }
+
+    };
+
+    const validateForm = () => {
+     
+        if(!formData.username || !formData.email || !formData.password) {
+            alert("All fields are required!");
+            return false;
+        }
+        if(formData.password !== formData.confirmPassword) {
+            alert("Passwords do not match!");
+            return false;
+        }
+        return true;
+
+    }
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -33,84 +67,31 @@ const Register = () => {
 
                         {/* Full Name */}
                         <div className="form-floating mb-3">
-                            <input type="text" className="form-control" id="fullName" placeholder="John Doe" />
-                            <label htmlFor="fullName">Full Name</label>
+                            <input onChange={handleChange} value={formData.username} name="username" type="text" className="form-control" id="fullName" placeholder="John Doe" />
+                            <label htmlFor="fullName">Username</label>
                         </div>
 
-                        {/* Date of Birth */}
-                        <div className="form-floating mb-3">
-                            <input type="date" className="form-control" id="dob" />
-                            <label htmlFor="dob">Date of Birth</label>
-                        </div>
-
-                        {/* Gender */}
-                        <div className="form-floating mb-3">
-                            <select className="form-select" id="gender">
-                                <option value="">Select Gender</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                            <label htmlFor="gender">Gender</label>
-                        </div>
-
-                        {/* Blood Group */}
-                        <div className="form-floating mb-3">
-                            <select className="form-select" id="bloodGroup">
-                                <option value="">Select Blood Group</option>
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                            </select>
-                            <label htmlFor="bloodGroup">Blood Group</label>
-                        </div>
-
-                        {/* Phone */}
-                        <div className="form-floating mb-3">
-                            <input type="tel" className="form-control" id="phone" placeholder="9876543210" />
-                            <label htmlFor="phone">Phone Number</label>
-                        </div>
-
-                        {/* Address */}
-                        <div className="form-floating mb-3">
-                            <textarea className="form-control" placeholder="Enter your address" id="address" style={{ height: "80px" }}></textarea>
-                            <label htmlFor="address">Address</label>
-                        </div>
+                       
 
                         {/* Email */}
                         <div className="form-floating mb-3">
-                            <input type="email" className="form-control" id="email" placeholder="name@example.com" />
+                            <input onChange={handleChange} value={formData.email} name="email" type="email" className="form-control" id="email" placeholder="name@example.com" />
                             <label htmlFor="email">Email Address</label>
                         </div>
 
                         {/* Password */}
                         <div className="form-floating mb-3">
-                            <input type="password" className="form-control" id="password" placeholder="Password" />
+                            <input name="password" value={formData.password} onChange={handleChange} type="password" className="form-control" id="password" placeholder="Password" />
                             <label htmlFor="password">Password</label>
                         </div>
 
                         {/* Confirm Password */}
                         <div className="form-floating mb-3">
-                            <input type="password" className="form-control" id="confirmPassword" placeholder="Confirm Password" />
+                            <input name="confirmPassword" onChange={handleChange} value={formData.confirmPassword} type="password" className="form-control" id="confirmPassword" placeholder="Confirm Password" />
                             <label htmlFor="confirmPassword">Confirm Password</label>
                         </div>
 
-                        {/* Emergency Contact */}
-                        <div className="form-floating mb-3">
-                            <input type="tel" className="form-control" id="emergencyContact" placeholder="Emergency Contact" />
-                            <label htmlFor="emergencyContact">Emergency Contact</label>
-                        </div>
-
-                        {/* Allergies */}
-                        <div className="form-floating mb-3">
-                            <textarea className="form-control" placeholder="Any allergies?" id="allergies" style={{ height: "80px" }}></textarea>
-                            <label htmlFor="allergies">Allergies</label>
-                        </div>
-
+                        
                         {/* Checkbox */}
                         <div className="form-check text-start my-3">
                             <input className="form-check-input" type="checkbox" value="remember-me" id="checkDefault" />
