@@ -9,5 +9,6 @@ import HomePage from "./HomePage.jsx";
 createRoot(document.getElementById('root')).render(
   <StrictMode>
      <Navigation />
+
   </StrictMode>,
 )
