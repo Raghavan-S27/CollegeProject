@@ -17,6 +17,7 @@ const Login = () => {
         newData({ ...data, [name]: value });
     }
 
+    //Since each button have their own separate onClick, this will be overridden
     const handleSubmit = (e) => {
         e.preventDefault();
         // Add your login logic here
@@ -28,6 +29,11 @@ const Login = () => {
         e.preventDefault();
         navigate("/register");
     }
+    const handleSignin = (e) => {
+        e.preventDefault();
+        navigate("/home");
+    }
+
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -83,7 +89,7 @@ const Login = () => {
 
                         </div>
 
-                        <button className="btn btn-primary w-100 py-2" type="submit">
+                        <button className="btn btn-primary w-100 py-2" type="submit" onClick={handleSignin}>
                             Sign in
                         </button>
                         <br/>
