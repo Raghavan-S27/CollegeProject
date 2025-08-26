@@ -18,15 +18,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     UserRepository userRepository;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user=userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        UserEntity user=userRepository.findByEmail(email);
 
         if(user==null)
         {
             throw new UsernameNotFoundException("User Not Found");
         }
 
-        return new User(user.getUsername(),user.getPassword(),
+        return new User(user.getEmail(),user.getPassword(),
                 Collections.singleton(new SimpleGrantedAuthority("USER")));
 
     }
