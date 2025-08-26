@@ -1,8 +1,22 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
+
 
 const Login = () => {
     const navigate = useNavigate();
+
+    const [data, newData] = useState (
+        {
+            email: "",
+            password: ""
+        }
+    );
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        newData({ ...data, [name]: value });
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // Add your login logic here
@@ -35,7 +49,8 @@ const Login = () => {
                         <h1 className="h3 mb-3 fw-normal text-center">Please sign in</h1>
 
                         <div className="form-floating mb-3">
-                            <input
+                            <input onChange={handleChange} value={data.email}
+                                   name="email"
                                 type="email"
                                 className="form-control"
                                 id="floatingInput"
@@ -45,7 +60,8 @@ const Login = () => {
                         </div>
 
                         <div className="form-floating mb-3">
-                            <input
+                            <input onChange={handleChange} value={data.password}
+                                   name="password"
                                 type="password"
                                 className="form-control"
                                 id="floatingPassword"
