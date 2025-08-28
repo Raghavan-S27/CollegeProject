@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useNavigate} from "react-router-dom";
+import { loginUser } from './Services/Service';
 
 
 const Login = () => {
@@ -21,6 +22,7 @@ const Login = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Add your login logic here
+        loginUser(data);
         console.log('Login form submitted');
         alert('Successfully logged in! Directing to HomePage :) Ramesh');
     };
@@ -29,9 +31,26 @@ const Login = () => {
         e.preventDefault();
         navigate("/register");
     }
-    const handleSignin = (e) => {
+    const handleSignin = async (e) => {
         e.preventDefault();
-        navigate("/home");
+        try
+        {
+            const respone= await loginUser(data);
+            if(respone &&respone.accessToken)
+            {
+                alert('Successfully logged in! Directing to HomePage :) Raghavan');
+                navigate("/home");
+            }
+            else
+            {
+                alert('Login failed! Please try again :) Raghavan');
+            }
+        }
+        catch(error)
+        {
+            console.error("Login error:", error);
+            alert('Login failed! Please try again :) Raghavan');
+        }
     }
 
     return (
