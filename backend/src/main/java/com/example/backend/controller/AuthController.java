@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api/hospital")
@@ -25,9 +28,12 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String loginUser(@RequestBody UserEntity user)
+    public Map<String, String> loginUser(@RequestBody UserEntity user)
     {
-        return authService.loginUser(user);
+        Map<String,String> respone=new HashMap<>();
+
+        respone.put("accessToken", authService.loginUser(user));
+        return respone;
     }
 
     @GetMapping("/verify")
