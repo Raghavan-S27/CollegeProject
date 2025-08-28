@@ -9,7 +9,7 @@ import Profile from "./Profile.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <Profile/>
+     <Navigation/>
 
   </StrictMode>,
 )

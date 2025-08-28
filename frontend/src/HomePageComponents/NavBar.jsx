@@ -1,7 +1,13 @@
 import React from 'react';
 import '../CSSFolder/home.css';
+import {useNavigate} from "react-router-dom";
 
 const NavBar = () => {
+    const navigate = useNavigate();
+    function handleProfile() {
+        navigate("/profile");
+    }
+
     return (
         <>
             {/* Main Navbar */}
@@ -68,7 +74,7 @@ const NavBar = () => {
                                     </div>
                                 </a>
                                 <ul className="dropdown-menu dropdown-menu-end">
-                                    <li><a className="dropdown-item" href="#">Profile</a></li>
+                                    <li><a className="dropdown-item" href="#" onClick={handleProfile}>Profile</a></li>
                                     <li><hr className="dropdown-divider"/></li>
                                     <li><a className="dropdown-item" href="#">Logout</a></li>
                                 </ul>
