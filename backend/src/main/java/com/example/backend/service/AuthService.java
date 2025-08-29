@@ -37,4 +37,8 @@ public class AuthService {
         }
         return "Failed";
     }
+
+    public UserEntity findUserByEmail(String email) {
+        return authRepository.findByEmail(email);
+    }
 }

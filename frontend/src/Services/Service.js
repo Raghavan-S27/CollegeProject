@@ -23,6 +23,8 @@ export const loginUser = async (credentials) => {
         const response = await axios.post(`${API_BASE_URL}/login`, credentials);
         const token = response.data.accessToken;
         console.log("Received token:", token);
+        localStorage.setItem("role", response.data.role);
+        console.log("Received role:", response.data.role);
         localStorage.setItem("accessToken", token);
         return response.data;
     } catch (error) {
