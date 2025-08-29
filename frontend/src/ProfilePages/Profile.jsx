@@ -11,7 +11,7 @@ import {
     Modal,
 } from "react-bootstrap";
 import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
-import "./CSSFolder/profile.css";
+import "../CSSFolder/profile.css";
 
 const Profile = () => {
     const [showModal, setShowModal] = useState(false);

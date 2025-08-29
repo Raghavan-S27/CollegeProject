@@ -1,6 +1,13 @@
 import React from 'react';
 import '../CSSFolder/home.css'
+import {useNavigate} from "react-router-dom";
 const Hero = () => {
+    const navigate = useNavigate();
+    const  handleAppointment = () => {
+        navigate("/appointments");
+    }
+
+
     return (
         <section id="Title">
             <div className="container col-xxl-8 px-4 pt-5">
@@ -18,7 +25,7 @@ const Hero = () => {
 
                                 Get Started
                             </button>
-                            <button type="button" className="btn btn-outline-dark btn-lg px-4">
+                            <button type="button" className="btn btn-outline-dark btn-lg px-4" onClick={handleAppointment}>
 
                                 Book Appointment
                             </button>
