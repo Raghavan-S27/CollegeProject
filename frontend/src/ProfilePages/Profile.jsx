@@ -10,7 +10,7 @@ import {
     Badge,
     Modal,
 } from "react-bootstrap";
-import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import {FaEye, FaEdit, FaTrash, FaStethoscope} from "react-icons/fa";
 import "../CSSFolder/profile.css";
 
 const Profile = () => {
@@ -187,9 +187,18 @@ const Profile = () => {
                             <Form.Label>Full Name</Form.Label>
                             <Form.Control type="text" placeholder="Enter doctor's name" />
                         </Form.Group>
-                        <Form.Group className="mb-3">
-                            <Form.Label>Specialization</Form.Label>
-                            <Form.Control type="text" placeholder="e.g. Cardiology" />
+                        <Form.Group  className="mb-3">
+                            <Form.Label>
+                                Select Department
+                            </Form.Label>
+                            <Form.Select required>
+                                <option value="">Choose...</option>
+                                <option>Cardiology</option>
+                                <option>Neurology</option>
+                                <option>Pediatrics</option>
+                                <option>Orthopedics</option>
+                                <option>Dermatology</option>
+                            </Form.Select>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
@@ -200,11 +209,16 @@ const Profile = () => {
                             <Form.Control type="text" placeholder="+1 (555) 000-0000" />
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Status</Form.Label>
+                            <Form.Label>Gender</Form.Label>
                             <Form.Select>
-                                <option>Active</option>
-                                <option>On Leave</option>
+                                <option>Male</option>
+                                <option>Female</option>
+                                <option>Others</option>
                             </Form.Select>
+                        </Form.Group>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Experience</Form.Label>
+                            <Form.Control type="number" placeholder="0" />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
