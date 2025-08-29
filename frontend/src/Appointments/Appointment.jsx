@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";  // ⬅️ Added
+import { useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
     Card,
@@ -13,19 +13,22 @@ import { FaCalendarPlus, FaStethoscope, FaUserMd } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
 
 const Appointment = () => {
-    const location = useLocation();  // ⬅️ Added
-    const prefilledDoctor = location.state?.doctor; // ⬅️ doctor passed from FeaturedDoctors
+    const location = useLocation();
+    const prefilledDoctor = location.state?.doctor;
 
     const [showSuccess, setShowSuccess] = useState(false);
+    const [availableSlots, setAvailableSlots] = useState([]); // slots for selected date
+    const [bookedSlots, setBookedSlots] = useState({}); // store booked slots by date
 
     const [details, setDetails] = useState({
         department: "",
         doctor: "",
         date: "",
         reason: "",
+        timeSlot: "",
     });
 
-    // ⬅️ Pre-fill department & doctor if passed
+    // Prefill if doctor was passed
     useEffect(() => {
         if (prefilledDoctor) {
             setDetails((prev) => ({
@@ -44,24 +47,81 @@ const Appointment = () => {
         }));
     };
 
+    // Generate slots 9:00–16:30, 30 min each
+    const generateSlots = () => {
+        const slots = [];
+        let start = new Date();
+        start.setHours(9, 0, 0, 0);
+
+        const end = new Date();
+        end.setHours(16, 30, 0, 0);
+
+        let id = 1;
+        while (start < end) {
+            const next = new Date(start.getTime() + 30 * 60000);
+            slots.push({
+                id: id++,
+                startTime: start.toTimeString().slice(0, 5),
+                endTime: next.toTimeString().slice(0, 5),
+            });
+            start = next;
+        }
+        return slots;
+    };
+
+    // Check availability (frontend only)
+    const handleCheckAvailability = () => {
+        if (!details.doctor || !details.department || !details.date) {
+            alert("Please select doctor, department, and date first.");
+            return;
+        }
+
+        const allSlots = generateSlots();
+        const bookedForDate = bookedSlots[details.date] || [];
+
+        // Filter out already booked slots
+        const freeSlots = allSlots.filter(
+            (slot) =>
+                !bookedForDate.some(
+                    (b) => b.startTime === slot.startTime && b.endTime === slot.endTime
+                )
+        );
+
+        setAvailableSlots(freeSlots);
+    };
+
     const handleBook = (e) => {
         e.preventDefault();
+        if (!details.timeSlot) {
+            alert("Please select a time slot before booking.");
+            return;
+        }
+
+        // Save booked slot under the selected date
+        const [startTime, endTime] = details.timeSlot.split(" - ");
+        setBookedSlots((prev) => {
+            const existing = prev[details.date] || [];
+            return {
+                ...prev,
+                [details.date]: [...existing, { startTime, endTime }],
+            };
+        });
+
         setShowSuccess(true);
 
-        // reset after booking
+        // Reset form
         setDetails({
             department: "",
             doctor: "",
             date: "",
             reason: "",
+            timeSlot: "",
         });
+        setAvailableSlots([]);
     };
 
-    // Get today's date
     const today = new Date();
     const minDate = today.toISOString().split("T")[0];
-
-    // Get 7 days ahead
     const maxDateObj = new Date();
     maxDateObj.setDate(today.getDate() + 7);
     const maxDate = maxDateObj.toISOString().split("T")[0];
@@ -74,9 +134,7 @@ const Appointment = () => {
                     <FaCalendarPlus className="me-2" />
                     Book an Appointment
                 </h2>
-                <p className="text-muted">
-                    Fill out the details below to schedule your appointment
-                </p>
+                <p className="text-muted">Fill out the details below to schedule your appointment</p>
             </div>
 
             {/* Appointment Form */}
@@ -139,7 +197,6 @@ const Appointment = () => {
                                     name="date"
                                     value={details.date}
                                 />
-
                             </div>
                         </Col>
 
@@ -147,12 +204,37 @@ const Appointment = () => {
                             <Button
                                 variant="info"
                                 className="w-100"
-                                onClick={() => alert("Checking availability...")}
+                                type="button"
+                                onClick={handleCheckAvailability}
                             >
                                 Check Availability
                             </Button>
                         </Col>
                     </Row>
+
+                    {/* Available Slots */}
+                    {availableSlots.length > 0 && (
+                        <div className="mb-3">
+                            <Form.Label className="fw-semibold">🕒 Select Time Slot</Form.Label>
+                            <div className="d-flex flex-wrap gap-3">
+                                {availableSlots.map((slot) => {
+                                    const slotValue = `${slot.startTime} - ${slot.endTime}`;
+                                    return (
+                                        <Form.Check
+                                            key={slot.id}
+                                            type="radio"
+                                            id={`slot-${slot.id}`}
+                                            label={slotValue}
+                                            name="timeSlot"
+                                            value={slotValue}
+                                            checked={details.timeSlot === slotValue}
+                                            onChange={handleChange}
+                                        />
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    )}
 
                     <Form.Group className="mb-3">
                         <Form.Label className="fw-semibold">Reason for Visit</Form.Label>
@@ -182,7 +264,6 @@ const Appointment = () => {
                 </Modal.Header>
                 <Modal.Body>
                     Your appointment has been successfully scheduled.
-                    You will receive a confirmation email shortly.
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="success" onClick={() => setShowSuccess(false)}>
