@@ -56,3 +56,17 @@ export const deleteDoctor = async (doctorId) => {
         throw error;
     }
 }
+
+export const savePatientRecords= async (patientData) => {
+    try {
+        const response = await axios.post(`${API_BASE_URL}/savepatientdetails`, patientData, authHeaders());
+        return response.data;
+    } catch (error) {
+        console.error("Error saving patient records:", error);
+        throw error;
+    }
+}
+
+export const getPatientRecords = () => {
+    return axios.get(`${API_BASE_URL}/getpatientdetails`, authHeaders());
+}

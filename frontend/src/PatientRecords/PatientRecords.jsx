@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
     Card,
@@ -10,32 +10,14 @@ import {
 import { FaUserInjured, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../CSSFolder/patientRecords.css";
+import { getPatientRecords, savePatientRecords } from "../Services/Service";
+import { format } from "date-fns";
 
 const PatientRecords = () => {
     const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);
     const [patients, setPatients] = useState([
-        {
-            id: 1,
-            name: "John Doe",
-            age: 32,
-            contact: "9876543210",
-            dob: "1993-05-14",
-            address: "New York, USA",
-            diagnosis: "Flu",
-            lastVisit: "2025-08-21"
-        },
-        {
-            id: 2,
-            name: "Emma Watson",
-            age: 45,
-            contact: "8765432109",
-            dob: "1980-04-15",
-            address: "London, UK",
-            diagnosis: "Diabetes",
-            lastVisit: "2025-08-20"
-        },
     ]);
 
     const [newPatient, setNewPatient] = useState({
@@ -45,7 +27,7 @@ const PatientRecords = () => {
         dob: "",
         address: "",
         diagnosis: "",
-        lastVisit: "",
+       
     });
 
     // Open & Close Modal
@@ -59,13 +41,13 @@ const PatientRecords = () => {
             dob: "",
             address: "",
             diagnosis: "",
-            lastVisit: "",
         });
     };
 
     // Add Patient
     const handleSave = () => {
-        setPatients([...patients, { id: patients.length + 1, ...newPatient }]);
+        // setPatients([...patients, { id: patients.length + 1, ...newPatient }]);
+        savePatientRecords(newPatient);  
         handleClose();
     };
 
@@ -87,6 +69,15 @@ const PatientRecords = () => {
             [name]: value,
         }));
     };
+
+    useEffect(() => {
+        getPatientRecords().then((resp) => {
+            console.log("Patient records fetched:", resp.data);
+            setPatients(resp.data);
+        }).catch((err) => {
+            console.error("Error fetching patient records:", err);
+        });
+    }, []);
 
     return (
         <div className="container mt-5 patient-records-container">
@@ -132,7 +123,9 @@ const PatientRecords = () => {
                             <td>{p.dob}</td>
                             <td>{p.address}</td>
                             <td>{p.diagnosis}</td>
-                            <td>{p.lastVisit}</td>
+                            <td>{
+                                format(new Date(p.lastVisit), 'dd-MM-yyyy')
+                                }</td>
                             <td>
                                 <Button size="sm" variant="warning" className="me-2">
                                     <FaEdit />
@@ -226,7 +219,7 @@ const PatientRecords = () => {
                                 required
                             />
                         </Form.Group>
-                        <Form.Group className="mb-2">
+                        {/* <Form.Group className="mb-2">
                             <Form.Label>Last Visit</Form.Label>
                             <Form.Control
                                 type="date"
@@ -235,7 +228,7 @@ const PatientRecords = () => {
                                 onChange={handleChangePatient}
                                 required
                             />
-                        </Form.Group>
+                        </Form.Group> */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>

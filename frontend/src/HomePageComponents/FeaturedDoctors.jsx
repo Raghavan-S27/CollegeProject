@@ -1,27 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import '../CSSFolder/home.css';
+import { getDoctorDetails } from '../Services/Service';
 
 const FeaturedDoctors = () => {
-    const doctors = [
-        {
-            name: "Dr. Alice Morgan",
-            specialty: "Cardiologist",
-            experience: "12 years",
-            education: "MD, Harvard Medical School",
-        },
-        {
-            name: "Dr. Brian Lee",
-            specialty: "Neurologist",
-            experience: "9 years",
-            education: "MD, Johns Hopkins University",
-        },
-        {
-            name: "Dr. Clara Patel",
-            specialty: "Pediatrician",
-            experience: "15 years",
-            education: "MD, Stanford University",
-        }
-    ];
+    const [doctors,setDoctors] =useState( []);
+
+useEffect(()=>{
+    getDoctorDetails().then((resp)=>{
+        setDoctors(resp.data);
+        console.log(resp);
+    }).catch((err)=>{
+        console.log(err);
+    });
+},[]);
 
     return (
         <section id="featured-doctors" className="doctors-section py-5">

@@ -31,4 +31,15 @@ public class DoctorService {
             throw new RuntimeException("Doctor Not Found");
         }
     }
+
+    public void updateDoctorDetails(Long id, DoctorEntity doctorDetails) {
+
+        if(doctorRepository.existsById(id))
+        {
+        doctorRepository.save(doctorDetails);
+        }
+        else {
+            throw new RuntimeException("Doctor id not found");
+        }
+    }
 }
