@@ -35,6 +35,7 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
         );
 
+        http.cors(Customizer.withDefaults());
         http.csrf(customizer->customizer.disable());
 
         http.httpBasic(Customizer.withDefaults());
