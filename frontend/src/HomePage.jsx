@@ -8,7 +8,7 @@ import Footer from "./HomePageComponents/Footer.jsx";
 const HomePage = () => {
     return (
         <>
-        <NavBar/>
+
         <Hero/>
             <FeaturedDoctors/>
             <Footer/>

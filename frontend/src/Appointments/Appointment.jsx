@@ -11,12 +11,37 @@ import {
 import { FaCalendarPlus, FaStethoscope, FaUserMd, FaClock } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
 
-const appointments = () => {
+const Appointment = () => {
     const [showSuccess, setShowSuccess] = useState(false);
+
+    const [details, setDetails] = useState({
+        department: "",
+        doctor: "",
+        date: "",
+        time: "",
+        reason: "",
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDetails((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
+    };
 
     const handleBook = (e) => {
         e.preventDefault();
         setShowSuccess(true);
+
+        // reset after booking
+        setDetails({
+            department: "",
+            doctor: "",
+            date: "",
+            time: "",
+            reason: "",
+        });
     };
 
     // Get today's date
@@ -54,7 +79,9 @@ const appointments = () => {
                     <FaCalendarPlus className="me-2" />
                     Book an Appointment
                 </h2>
-                <p className="text-muted">Fill out the details below to schedule your appointment</p>
+                <p className="text-muted">
+                    Fill out the details below to schedule your appointment
+                </p>
             </div>
 
             {/* Appointment Form */}
@@ -67,13 +94,18 @@ const appointments = () => {
                                     <FaStethoscope className="me-2 text-primary" />
                                     Select Department
                                 </Form.Label>
-                                <Form.Select required>
+                                <Form.Select
+                                    required
+                                    onChange={handleChange}
+                                    name="department"
+                                    value={details.department}
+                                >
                                     <option value="">Choose...</option>
-                                    <option>Cardiology</option>
-                                    <option>Neurology</option>
-                                    <option>Pediatrics</option>
-                                    <option>Orthopedics</option>
-                                    <option>Dermatology</option>
+                                    <option value="Cardiology">Cardiology</option>
+                                    <option value="Neurology">Neurology</option>
+                                    <option value="Pediatrics">Pediatrics</option>
+                                    <option value="Orthopedics">Orthopedics</option>
+                                    <option value="Dermatology">Dermatology</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>
@@ -83,11 +115,16 @@ const appointments = () => {
                                     <FaUserMd className="me-2 text-success" />
                                     Choose Doctor
                                 </Form.Label>
-                                <Form.Select required>
+                                <Form.Select
+                                    required
+                                    onChange={handleChange}
+                                    name="doctor"
+                                    value={details.doctor}
+                                >
                                     <option value="">Choose...</option>
-                                    <option>Dr. Sarah Johnson</option>
-                                    <option>Dr. Michael Chen</option>
-                                    <option>Dr. Emily Rodriguez</option>
+                                    <option value="Dr. Sarah Johnson">Dr. Sarah Johnson</option>
+                                    <option value="Dr. Michael Chen">Dr. Michael Chen</option>
+                                    <option value="Dr. Emily Rodriguez">Dr. Emily Rodriguez</option>
                                 </Form.Select>
                             </Form.Group>
                         </Col>
@@ -105,6 +142,9 @@ const appointments = () => {
                                     min={minDate}
                                     max={maxDate}
                                     className="bright-calendar"
+                                    onChange={handleChange}
+                                    name="date"
+                                    value={details.date}
                                 />
                             </Form.Group>
                         </Col>
@@ -114,10 +154,17 @@ const appointments = () => {
                                     <FaClock className="me-2 text-warning" />
                                     Appointment Time
                                 </Form.Label>
-                                <Form.Select required>
+                                <Form.Select
+                                    required
+                                    onChange={handleChange}
+                                    name="time"
+                                    value={details.time}
+                                >
                                     <option value="">Select a Time</option>
                                     {timeSlots.map((slot, index) => (
-                                        <option key={index}>{slot}</option>
+                                        <option key={index} value={slot}>
+                                            {slot}
+                                        </option>
                                     ))}
                                 </Form.Select>
                             </Form.Group>
@@ -131,6 +178,9 @@ const appointments = () => {
                             rows={3}
                             placeholder="Describe your symptoms or reason for consultation"
                             required
+                            onChange={handleChange}
+                            name="reason"
+                            value={details.reason}
                         />
                     </Form.Group>
 
@@ -161,4 +211,4 @@ const appointments = () => {
     );
 };
 
-export default appointments;
+export default Appointment;

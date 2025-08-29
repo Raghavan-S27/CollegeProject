@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-
 import {
     Card,
     Table,
@@ -9,9 +8,12 @@ import {
     Form,
 } from "react-bootstrap";
 import { FaUserInjured, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import "../CSSFolder/patientRecords.css"
+import { useNavigate } from "react-router-dom";
+import "../CSSFolder/patientRecords.css";
 
 const PatientRecords = () => {
+    const navigate = useNavigate();
+
     const [showModal, setShowModal] = useState(false);
     const [patients, setPatients] = useState([
         { id: 1, name: "John Doe", age: 32, contact: "9876543210", diagnosis: "Flu", lastVisit: "2025-08-21" },
@@ -34,16 +36,26 @@ const PatientRecords = () => {
 
     // Add Patient
     const handleSave = () => {
-        setPatients([
-            ...patients,
-            { id: patients.length + 1, ...newPatient },
-        ]);
+        setPatients([...patients, { id: patients.length + 1, ...newPatient }]);
         handleClose();
     };
 
     // Delete Patient
     const handleDelete = (id) => {
         setPatients(patients.filter((p) => p.id !== id));
+    };
+
+    // Navigate to Billing with selected patient
+    const handleGenerateBill = (patient) => {
+        navigate("/billing", { state: { patient } });
+    };
+
+    const handleChangePatient = (e) => {
+        const { name, value } = e.target;
+        setNewPatient((prev) => ({
+            ...prev,
+            [name]: value,
+        }));
     };
 
     return (
@@ -91,8 +103,20 @@ const PatientRecords = () => {
                                 <Button size="sm" variant="warning" className="me-2">
                                     <FaEdit />
                                 </Button>
-                                <Button size="sm" variant="danger" onClick={() => handleDelete(p.id)}>
+                                <Button
+                                    size="sm"
+                                    variant="danger"
+                                    className="me-2"
+                                    onClick={() => handleDelete(p.id)}
+                                >
                                     <FaTrash />
+                                </Button>
+                                <Button
+                                    size="sm"
+                                    variant="info"
+                                    onClick={() => handleGenerateBill(p)}
+                                >
+                                    💳 Generate Bill
                                 </Button>
                             </td>
                         </tr>
@@ -112,8 +136,9 @@ const PatientRecords = () => {
                             <Form.Label>Name</Form.Label>
                             <Form.Control
                                 type="text"
+                                name="name"
                                 value={newPatient.name}
-                                onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
+                                onChange={handleChangePatient}
                                 required
                             />
                         </Form.Group>
@@ -121,8 +146,9 @@ const PatientRecords = () => {
                             <Form.Label>Age</Form.Label>
                             <Form.Control
                                 type="number"
+                                name="age"
                                 value={newPatient.age}
-                                onChange={(e) => setNewPatient({ ...newPatient, age: e.target.value })}
+                                onChange={handleChangePatient}
                                 required
                             />
                         </Form.Group>
@@ -130,8 +156,9 @@ const PatientRecords = () => {
                             <Form.Label>Contact</Form.Label>
                             <Form.Control
                                 type="tel"
+                                name="contact"
                                 value={newPatient.contact}
-                                onChange={(e) => setNewPatient({ ...newPatient, contact: e.target.value })}
+                                onChange={handleChangePatient}
                                 required
                             />
                         </Form.Group>
@@ -139,8 +166,9 @@ const PatientRecords = () => {
                             <Form.Label>Diagnosis</Form.Label>
                             <Form.Control
                                 type="text"
+                                name="diagnosis"
                                 value={newPatient.diagnosis}
-                                onChange={(e) => setNewPatient({ ...newPatient, diagnosis: e.target.value })}
+                                onChange={handleChangePatient}
                                 required
                             />
                         </Form.Group>
@@ -148,8 +176,9 @@ const PatientRecords = () => {
                             <Form.Label>Last Visit</Form.Label>
                             <Form.Control
                                 type="date"
+                                name="lastVisit"
                                 value={newPatient.lastVisit}
-                                onChange={(e) => setNewPatient({ ...newPatient, lastVisit: e.target.value })}
+                                onChange={handleChangePatient}
                                 required
                             />
                         </Form.Group>

@@ -181,7 +181,6 @@ const Profile = () => {
                 <th>Doctor</th>
                 <th>Specialization</th>
                 <th>Contact</th>
-                <th>Status</th>
                 <th className="text-center">Actions</th>
               </tr>
             </thead>
@@ -196,13 +195,7 @@ const Profile = () => {
                   <td>
                     {doc.email} <br /> {doc.phone}
                   </td>
-                  <td>
-                    {doc.status === "Active" ? (
-                      <Badge bg="success">Active</Badge>
-                    ) : (
-                      <Badge bg="warning">On Leave</Badge>
-                    )}
-                  </td>
+
                   <td className="text-center">
                     <FaEye
                       className="action-icon text-primary me-3"

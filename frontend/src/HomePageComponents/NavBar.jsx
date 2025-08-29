@@ -8,6 +8,18 @@ const NavBar = () => {
         navigate("/profile");
     }
 
+    const handleLogout = () => {
+        navigate("/");
+    }
+
+    function handleHome() {
+        navigate("/home");
+    }
+
+    function handleRecords() {
+        navigate("/patient");
+    }
+
     return (
         <>
             {/* Main Navbar */}
@@ -34,14 +46,17 @@ const NavBar = () => {
                         <div className="collapse navbar-collapse">
                             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li className="nav-item">
-                                    <a className="nav-link active" href="#">Home</a>
+                                    <a className="nav-link active" href="#" onClick={handleHome}>Home</a>
                                 </li>
                                 <li className="nav-item">
                                     <a className="nav-link" href="#">Appointments</a>
                                 </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="#" onClick={handleRecords}>Patient Records</a>
+                                </li>
 
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#">Doctors</a>
+                                    <a className="nav-link" href="#" >Doctors</a>
                                 </li>
                             </ul>
 
@@ -74,7 +89,7 @@ const NavBar = () => {
                                 <ul className="dropdown-menu dropdown-menu-end">
                                     <li><a className="dropdown-item" href="#" onClick={handleProfile}>Profile</a></li>
                                     <li><hr className="dropdown-divider"/></li>
-                                    <li><a className="dropdown-item" href="#">Logout</a></li>
+                                    <li><a className="dropdown-item" href="#" onClick={handleLogout}>Logout</a></li>
                                 </ul>
                             </div>
                         </div>
