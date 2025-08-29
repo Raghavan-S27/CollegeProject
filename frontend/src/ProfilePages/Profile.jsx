@@ -48,24 +48,7 @@ const Profile = () => {
     }
   };
 
-  const [doctors, setDoctors] = useState([
-    {
-      name: "Dr. Sarah Johnson",
-      degree: "MD, FACC",
-      specialization: "Cardiology",
-      email: "sarah.johnson@hospital.com",
-      phone: "+1 (555) 123-4567",
-      status: "Active",
-    },
-    {
-      name: "Dr. Michael Chen",
-      degree: "MD, PhD",
-      specialization: "Neurology",
-      email: "michael.chen@hospital.com",
-      phone: "+1 (555) 987-6543",
-      status: "Active",
-    },
-  ]);
+  const [doctors, setDoctors] = useState([]);
   const [doctorDetails, setDoctorDetails] = useState({
     name: "",
     specialization: "",
@@ -73,6 +56,7 @@ const Profile = () => {
     phoneNumber: "",
     gender: "",
     experienceYears: "",
+    degree: "",
   });
 
   const handleChange = (e) => {
@@ -254,6 +238,16 @@ const Profile = () => {
                 <option>Orthopedics</option>
                 <option>Dermatology</option>
               </Form.Select>
+            </Form.Group>
+            <Form.Group className="mb-3">
+              <Form.Label>Degree </Form.Label>
+              <Form.Control
+                value={doctorDetails.degree}
+                type="text"
+                placeholder="e.g. MD, FACC"
+                onChange={handleChange}
+                name={"degree"}
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Email</Form.Label>
