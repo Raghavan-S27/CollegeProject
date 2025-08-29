@@ -1,5 +1,6 @@
 package com.example.backend.repository;
 
+import com.example.backend.entity.AppointmentEntity;
 import com.example.backend.entity.DoctorEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DoctorRepository extends JpaRepository<DoctorEntity,Long> {
-
-    DoctorEntity findByNameAndSpecialization(String name, String specialization);
+public interface AppointmentRepo extends JpaRepository<AppointmentEntity,Long> {
+    List<AppointmentEntity> findByDoctor(DoctorEntity doctorByDept);
 }
