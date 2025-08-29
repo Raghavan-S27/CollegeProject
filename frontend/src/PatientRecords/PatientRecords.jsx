@@ -16,22 +16,51 @@ const PatientRecords = () => {
 
     const [showModal, setShowModal] = useState(false);
     const [patients, setPatients] = useState([
-        { id: 1, name: "John Doe", age: 32, contact: "9876543210", diagnosis: "Flu", lastVisit: "2025-08-21" },
-        { id: 2, name: "Emma Watson", age: 45, contact: "8765432109", diagnosis: "Diabetes", lastVisit: "2025-08-20" },
+        {
+            id: 1,
+            name: "John Doe",
+            age: 32,
+            contact: "9876543210",
+            dob: "1993-05-14",
+            address: "New York, USA",
+            diagnosis: "Flu",
+            lastVisit: "2025-08-21"
+        },
+        {
+            id: 2,
+            name: "Emma Watson",
+            age: 45,
+            contact: "8765432109",
+            dob: "1980-04-15",
+            address: "London, UK",
+            diagnosis: "Diabetes",
+            lastVisit: "2025-08-20"
+        },
     ]);
+
     const [newPatient, setNewPatient] = useState({
         name: "",
         age: "",
         contact: "",
+        dob: "",
+        address: "",
         diagnosis: "",
         lastVisit: "",
     });
 
-    // Open modal
+    // Open & Close Modal
     const handleShow = () => setShowModal(true);
     const handleClose = () => {
         setShowModal(false);
-        setNewPatient({ name: "", age: "", contact: "", diagnosis: "", lastVisit: "" });
+        setNewPatient({
+            name: "",
+            age: "",
+            contact: "",
+            dob: "",
+            address: "",
+            diagnosis: "",
+            lastVisit: "",
+        });
     };
 
     // Add Patient
@@ -50,6 +79,7 @@ const PatientRecords = () => {
         navigate("/billing", { state: { patient } });
     };
 
+    // Handle input changes
     const handleChangePatient = (e) => {
         const { name, value } = e.target;
         setNewPatient((prev) => ({
@@ -85,6 +115,8 @@ const PatientRecords = () => {
                         <th>Name</th>
                         <th>Age</th>
                         <th>Contact</th>
+                        <th>DOB</th>
+                        <th>Address</th>
                         <th>Diagnosis</th>
                         <th>Last Visit</th>
                         <th>Actions</th>
@@ -97,6 +129,8 @@ const PatientRecords = () => {
                             <td>{p.name}</td>
                             <td>{p.age}</td>
                             <td>{p.contact}</td>
+                            <td>{p.dob}</td>
+                            <td>{p.address}</td>
                             <td>{p.diagnosis}</td>
                             <td>{p.lastVisit}</td>
                             <td>
@@ -158,6 +192,26 @@ const PatientRecords = () => {
                                 type="tel"
                                 name="contact"
                                 value={newPatient.contact}
+                                onChange={handleChangePatient}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-2">
+                            <Form.Label>Date of Birth</Form.Label>
+                            <Form.Control
+                                type="date"
+                                name="dob"
+                                value={newPatient.dob}
+                                onChange={handleChangePatient}
+                                required
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-2">
+                            <Form.Label>Address</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="address"
+                                value={newPatient.address}
                                 onChange={handleChangePatient}
                                 required
                             />
