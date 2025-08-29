@@ -12,7 +12,7 @@ import PatientRecords from "./PatientRecords/PatientRecords.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <PatientRecords />
+    <Navigation />
 
   </StrictMode>,
 )
