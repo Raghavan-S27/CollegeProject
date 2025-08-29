@@ -17,8 +17,9 @@ const PatientRecords = () => {
     const navigate = useNavigate();
 
     const [showModal, setShowModal] = useState(false);
-    const [patients, setPatients] = useState([
-    ]);
+    const [patients, setPatients] = useState([]);
+    const [editMode, setEditMode] = useState(false);
+    const [selectedId, setSelectedId] = useState(null);
 
     const [newPatient, setNewPatient] = useState({
         name: "",
@@ -27,13 +28,12 @@ const PatientRecords = () => {
         dob: "",
         address: "",
         diagnosis: "",
-       
     });
 
-    // Open & Close Modal
-    const handleShow = () => setShowModal(true);
-    const handleClose = () => {
-        setShowModal(false);
+    // Open Modal in Add Mode
+    const handleShow = () => {
+        setEditMode(false);
+        setSelectedId(null);
         setNewPatient({
             name: "",
             age: "",
@@ -42,18 +42,53 @@ const PatientRecords = () => {
             address: "",
             diagnosis: "",
         });
+        setShowModal(true);
     };
 
-    // Add Patient
+    // Close Modal
+    const handleClose = () => {
+        setShowModal(false);
+        setEditMode(false);
+        setSelectedId(null);
+    };
+
+    // Save Patient (Add or Edit)
     const handleSave = () => {
-        // setPatients([...patients, { id: patients.length + 1, ...newPatient }]);
-        savePatientRecords(newPatient);  
-        handleClose();
+        const patientData = { ...newPatient, id: selectedId ?? undefined };
+
+        savePatientRecords(patientData)
+            .then(() => {
+                // re-fetch latest records so we get `lastVisit` from backend
+                return getPatientRecords();
+            })
+            .then((resp) => {
+                setPatients(resp.data);
+                handleClose();
+            })
+            .catch((err) => {
+                console.error("Error saving patient:", err);
+                alert("Failed to save patient. Please try again.");
+            });
     };
 
     // Delete Patient
     const handleDelete = (id) => {
         setPatients(patients.filter((p) => p.id !== id));
+    };
+
+    // Edit Patient
+    const handleEdit = (patient) => {
+        setEditMode(true);
+        setSelectedId(patient.id);
+        setNewPatient({
+            name: patient.name,
+            age: patient.age,
+            contact: patient.contact,
+            dob: patient.dob,
+            address: patient.address,
+            diagnosis: patient.diagnosis,
+        });
+        setShowModal(true);
     };
 
     // Navigate to Billing with selected patient
@@ -71,12 +106,14 @@ const PatientRecords = () => {
     };
 
     useEffect(() => {
-        getPatientRecords().then((resp) => {
-            console.log("Patient records fetched:", resp.data);
-            setPatients(resp.data);
-        }).catch((err) => {
-            console.error("Error fetching patient records:", err);
-        });
+        getPatientRecords()
+            .then((resp) => {
+                console.log("Patient records fetched:", resp.data);
+                setPatients(resp.data);
+            })
+            .catch((err) => {
+                console.error("Error fetching patient records:", err);
+            });
     }, []);
 
     return (
@@ -94,7 +131,11 @@ const PatientRecords = () => {
             <Card className="shadow-lg border-0 rounded-4 p-3">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <h5 className="fw-semibold">Patients List</h5>
-                    <Button variant="primary" className="rounded-pill px-3" onClick={handleShow}>
+                    <Button
+                        variant="primary"
+                        className="rounded-pill px-3"
+                        onClick={handleShow}
+                    >
                         <FaPlus className="me-2" /> Add Patient
                     </Button>
                 </div>
@@ -123,11 +164,18 @@ const PatientRecords = () => {
                             <td>{p.dob}</td>
                             <td>{p.address}</td>
                             <td>{p.diagnosis}</td>
-                            <td>{
-                                format(new Date(p.lastVisit), 'dd-MM-yyyy')
-                                }</td>
                             <td>
-                                <Button size="sm" variant="warning" className="me-2">
+                                {p.lastVisit
+                                    ? format(new Date(p.lastVisit), "dd-MM-yyyy")
+                                    : "-"}
+                            </td>
+                            <td>
+                                <Button
+                                    size="sm"
+                                    variant="warning"
+                                    className="me-2"
+                                    onClick={() => handleEdit(p)}
+                                >
                                     <FaEdit />
                                 </Button>
                                 <Button
@@ -152,10 +200,12 @@ const PatientRecords = () => {
                 </Table>
             </Card>
 
-            {/* Add Patient Modal */}
+            {/* Add/Edit Patient Modal */}
             <Modal show={showModal} onHide={handleClose} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>➕ Add New Patient</Modal.Title>
+                    <Modal.Title>
+                        {editMode ? "✏️ Edit Patient" : "➕ Add New Patient"}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form>
@@ -219,21 +269,15 @@ const PatientRecords = () => {
                                 required
                             />
                         </Form.Group>
-                        {/* <Form.Group className="mb-2">
-                            <Form.Label>Last Visit</Form.Label>
-                            <Form.Control
-                                type="date"
-                                name="lastVisit"
-                                value={newPatient.lastVisit}
-                                onChange={handleChangePatient}
-                                required
-                            />
-                        </Form.Group> */}
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>Cancel</Button>
-                    <Button variant="primary" onClick={handleSave}>Save</Button>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                    <Button variant="primary" onClick={handleSave}>
+                        {editMode ? "Update Patient" : "Save Patient"}
+                    </Button>
                 </Modal.Footer>
             </Modal>
         </div>

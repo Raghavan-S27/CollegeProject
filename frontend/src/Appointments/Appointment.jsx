@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";  // ⬅️ Added
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
     Card,
@@ -12,6 +13,9 @@ import { FaCalendarPlus, FaStethoscope, FaUserMd } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
 
 const Appointment = () => {
+    const location = useLocation();  // ⬅️ Added
+    const prefilledDoctor = location.state?.doctor; // ⬅️ doctor passed from FeaturedDoctors
+
     const [showSuccess, setShowSuccess] = useState(false);
 
     const [details, setDetails] = useState({
@@ -20,6 +24,17 @@ const Appointment = () => {
         date: "",
         reason: "",
     });
+
+    // ⬅️ Pre-fill department & doctor if passed
+    useEffect(() => {
+        if (prefilledDoctor) {
+            setDetails((prev) => ({
+                ...prev,
+                department: prefilledDoctor.specialty || "",
+                doctor: prefilledDoctor.name || "",
+            }));
+        }
+    }, [prefilledDoctor]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

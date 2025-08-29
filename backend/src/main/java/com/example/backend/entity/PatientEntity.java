@@ -29,4 +29,5 @@ public class PatientEntity {
 
     @CreationTimestamp
     private LocalDateTime lastVisit;
+
 }
