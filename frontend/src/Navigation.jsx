@@ -6,6 +6,7 @@ import HomePage from "./HomePage.jsx";
 import Profile from "./ProfilePages/Profile.jsx";
 import UserProfile from "./ProfilePages/UserProfile.jsx";
 import Appointments from "./Appointments/appointments.jsx";
+import PatientRecords from "./PatientRecords/PatientRecords.jsx";
 
 const Navigation = () => {
     return (
@@ -18,6 +19,8 @@ const Navigation = () => {
                 <Route path ="/profile" element={<Profile />} />
                 <Route path ="/userprofile" element={<UserProfile />} />
                 <Route path = "/appointments" element={<Appointments />} />
+
+                <Route path= "/patientRecords" element={<PatientRecords />} />
 
             </Routes>
         </Router>

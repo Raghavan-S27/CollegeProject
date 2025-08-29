@@ -8,10 +8,11 @@ import HomePage from "./HomePage.jsx";
 import Profile from "./ProfilePages/Profile.jsx";
 import UserProfile from "./ProfilePages/UserProfile.jsx";
 import Appointments from "./Appointments/appointments.jsx";
+import PatientRecords from "./PatientRecords/PatientRecords.jsx";
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-     <Navigation/>
+     <PatientRecords />
 
   </StrictMode>,
 )

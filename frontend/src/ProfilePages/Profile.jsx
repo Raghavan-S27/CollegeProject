@@ -60,6 +60,29 @@ const Profile = () => {
         },
     ];
 
+    const [doctorDetails, setDoctorDetails] = useState(
+        {
+            FullName:"",
+            Department:"",
+            Email:"",
+            Phone:"",
+            Gender:"",
+            Experience:""
+        }
+    );
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDoctorDetails((prev) => ({
+            ...prev,
+            [name]: value,   // dynamically update the field
+        }));
+    };
+
+    const handleSubmit =(e) => {
+        e.preventDefault();
+    }
+
     return (
         <div className="container mt-4 profile-container">
             {/* Stylish Header */}
@@ -185,13 +208,13 @@ const Profile = () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Full Name</Form.Label>
-                            <Form.Control type="text" placeholder="Enter doctor's name" />
+                            <Form.Control type="text" placeholder="Enter doctor's name" onChange={handleChange} name={"FullName"} />
                         </Form.Group>
                         <Form.Group  className="mb-3">
                             <Form.Label>
                                 Select Department
                             </Form.Label>
-                            <Form.Select required>
+                            <Form.Select required onChange={handleChange} name={"Department"}>
                                 <option value="">Choose...</option>
                                 <option>Cardiology</option>
                                 <option>Neurology</option>
@@ -202,15 +225,15 @@ const Profile = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" placeholder="doctor@example.com" />
+                            <Form.Control type="email" placeholder="doctor@example.com" onChange={handleChange} name={"Email"} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Phone</Form.Label>
-                            <Form.Control type="text" placeholder="+1 (555) 000-0000" />
+                            <Form.Control type="text" placeholder="+1 (555) 000-0000" onChange={handleChange} name={"Phone"} />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Gender</Form.Label>
-                            <Form.Select>
+                            <Form.Select onChange={handleChange} name={"Gender"}>
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Others</option>
@@ -218,7 +241,7 @@ const Profile = () => {
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Experience</Form.Label>
-                            <Form.Control type="number" placeholder="0" />
+                            <Form.Control type="number" placeholder="0" onChange={handleChange} name={"Experience"} />
                         </Form.Group>
                     </Form>
                 </Modal.Body>
@@ -226,7 +249,7 @@ const Profile = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button className="btn-add" onClick={handleClose}>
+                    <Button className="btn-add" onClick={handleSubmit} >
                         Save Doctor
                     </Button>
                 </Modal.Footer>
