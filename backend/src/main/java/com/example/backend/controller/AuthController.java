@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.entity.UserEntity;
 import com.example.backend.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,9 @@ public class AuthController {
     {
         Map<String,String> respone=new HashMap<>();
 
+        UserEntity dbUser=authService.findUserByEmail(user.getEmail());
         respone.put("accessToken", authService.loginUser(user));
+        respone.put("role",dbUser.getRole());
         return respone;
     }
 
