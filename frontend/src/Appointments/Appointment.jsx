@@ -8,7 +8,7 @@ import {
     Col,
     Modal,
 } from "react-bootstrap";
-import { FaCalendarPlus, FaStethoscope, FaUserMd, FaClock } from "react-icons/fa";
+import { FaCalendarPlus, FaStethoscope, FaUserMd } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
 
 const Appointment = () => {
@@ -18,7 +18,6 @@ const Appointment = () => {
         department: "",
         doctor: "",
         date: "",
-        time: "",
         reason: "",
     });
 
@@ -39,7 +38,6 @@ const Appointment = () => {
             department: "",
             doctor: "",
             date: "",
-            time: "",
             reason: "",
         });
     };
@@ -52,24 +50,6 @@ const Appointment = () => {
     const maxDateObj = new Date();
     maxDateObj.setDate(today.getDate() + 7);
     const maxDate = maxDateObj.toISOString().split("T")[0];
-
-    // Predefined time slots
-    const timeSlots = [
-        "09:00 AM",
-        "09:30 AM",
-        "10:00 AM",
-        "10:30 AM",
-        "11:00 AM",
-        "11:30 AM",
-        "12:00 PM",
-        "02:00 PM",
-        "02:30 PM",
-        "03:00 PM",
-        "03:30 PM",
-        "04:00 PM",
-        "04:30 PM",
-        "05:00 PM",
-    ];
 
     return (
         <div className="container mt-5 book-appointment-container">
@@ -132,10 +112,8 @@ const Appointment = () => {
 
                     <Row className="mb-3">
                         <Col md={6}>
-                            <Form.Group>
-                                <Form.Label className="fw-semibold">
-                                    📅 Appointment Date
-                                </Form.Label>
+                            <Form.Label className="fw-semibold">📅 Appointment Date</Form.Label>
+                            <div className="input-group">
                                 <Form.Control
                                     type="date"
                                     required
@@ -146,28 +124,18 @@ const Appointment = () => {
                                     name="date"
                                     value={details.date}
                                 />
-                            </Form.Group>
+
+                            </div>
                         </Col>
-                        <Col md={6}>
-                            <Form.Group>
-                                <Form.Label className="fw-semibold">
-                                    <FaClock className="me-2 text-warning" />
-                                    Appointment Time
-                                </Form.Label>
-                                <Form.Select
-                                    required
-                                    onChange={handleChange}
-                                    name="time"
-                                    value={details.time}
-                                >
-                                    <option value="">Select a Time</option>
-                                    {timeSlots.map((slot, index) => (
-                                        <option key={index} value={slot}>
-                                            {slot}
-                                        </option>
-                                    ))}
-                                </Form.Select>
-                            </Form.Group>
+
+                        <Col md={6} className="d-flex align-items-end">
+                            <Button
+                                variant="info"
+                                className="w-100"
+                                onClick={() => alert("Checking availability...")}
+                            >
+                                Check Availability
+                            </Button>
                         </Col>
                     </Row>
 

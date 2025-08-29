@@ -140,6 +140,8 @@ const Profile = () => {
             <option>Cardiology</option>
             <option>Neurology</option>
             <option>Pediatrics</option>
+              <option>Orthopedics</option>
+              <option>Dermatology</option>
           </Form.Select>
         </Col>
       </Row>

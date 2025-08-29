@@ -20,6 +20,10 @@ const NavBar = () => {
         navigate("/patient");
     }
 
+    const handleDoctor = () => {
+        navigate("/doctors");
+    }
+
     return (
         <>
             {/* Main Navbar */}
@@ -56,7 +60,7 @@ const NavBar = () => {
                                 </li>
 
                                 <li className="nav-item">
-                                    <a className="nav-link" href="#" >Doctors</a>
+                                    <a className="nav-link" href="#" onClick={handleDoctor}>Doctors</a>
                                 </li>
                             </ul>
 

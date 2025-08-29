@@ -9,6 +9,7 @@ import PatientRecords from "./PatientRecords/PatientRecords.jsx";
 import Appointment from "./Appointments/Appointment.jsx";
 import Billing from "./Billing/Billing.jsx";
 import NavBar from "./HomePageComponents/NavBar.jsx";
+import FeaturedDoctors from "./HomePageComponents/FeaturedDoctors.jsx";
 
 const Navigation = () => {
     return (
@@ -26,6 +27,7 @@ const Navigation = () => {
 
                 <Route path= "/patient" element={<PatientRecords />} />
                  <Route path= "/billing" element={<Billing />} />
+                <Route path="/doctors" element={<FeaturedDoctors/>} />
 
             </Routes>
         </Router>
