@@ -72,8 +72,10 @@ const PatientRecords = () => {
     };
 
     // Delete Patient
-    const handleDelete = (id) => {
-        setPatients(patients.filter((p) => p.id !== id));
+    const handleDelete = (id) => { 
+        if (window.confirm("Are you sure you want to delete this patient?")) {
+           
+        }
     };
 
     // Edit Patient

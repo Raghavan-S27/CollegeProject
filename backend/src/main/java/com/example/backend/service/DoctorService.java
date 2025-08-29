@@ -36,10 +36,26 @@ public class DoctorService {
 
         if(doctorRepository.existsById(id))
         {
-        doctorRepository.save(doctorDetails);
+            DoctorEntity existingDoctor=doctorRepository.findById(id).orElseThrow();
+
+            existingDoctor.setEmail(doctorDetails.getEmail());
+            existingDoctor.setDegree(doctorDetails.getDegree());
+            existingDoctor.setGender(doctorDetails.getGender());
+            existingDoctor.setExperienceYears(doctorDetails.getExperienceYears());
+            existingDoctor.setSpecialization(doctorDetails.getSpecialization());
+            existingDoctor.setPhoneNumber(doctorDetails.getPhoneNumber());
+            existingDoctor.setName(doctorDetails.getName());
+
+            doctorRepository.save(existingDoctor);
         }
-        else {
-            throw new RuntimeException("Doctor id not found");
-        }
+
+    }
+
+    public List<DoctorEntity> fetchDoctorsBySpl(String specialization) {
+        return doctorRepository.findBySpecialization(specialization);
+    }
+
+    public List<DoctorEntity> searchDoctors(String keyword) {
+        return doctorRepository.searchDoctors(keyword);
     }
 }

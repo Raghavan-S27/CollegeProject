@@ -72,3 +72,21 @@ export const savePatientRecords= async (patientData) => {
 export const getPatientRecords = () => {
     return axios.get(`${API_BASE_URL}/getpatientdetails`, authHeaders());
 }
+
+export const fetchDoctorsBySpecialization = (specialization) => {
+    return axios.post(`${API_BASE_URL}/doctorbyspecialization/${specialization}`,{}, authHeaders());
+}
+
+export const searchDoctors = (keyword) => {
+    return axios.post(`${API_BASE_URL}/searchdoctors/${keyword}`,{}, authHeaders());
+}
+
+export const deletePatient = async (patientId) => {
+    try {
+        const response = await axios.delete(`${API_BASE_URL}/deletepatient/${patientId}`, authHeaders());
+        return response.data;
+    } catch (error) {
+        console.error("Error deleting patient:", error);
+        throw error;
+    }
+}
