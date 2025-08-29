@@ -1,51 +1,45 @@
 import React, { useState } from "react";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { registerUser } from "./Services/Service";
 
 const Register = () => {
+    const [formData, setFormData] = useState({
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        role: "",
+    });
 
-    const [formData, setFormData] = useState(
-        {
-            username:"",
-            email: "",
-            password: "",
-            confirmPassword: ""
-        }
-    );
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
-    const navigate = useNavigate();
-
     const handleSubmit = (e) => {
-
         e.preventDefault();
-        if(validateForm())
-        {
+        if (validateForm()) {
             registerUser(formData);
-            console.log("Register form submitted");
+            console.log("Register form submitted:", formData);
             alert("Successfully Registered :)!");
             navigate("/");
         }
-
     };
 
     const validateForm = () => {
-     
-        if(!formData.username || !formData.email || !formData.password) {
+        if (!formData.username || !formData.email || !formData.password || !formData.role) {
             alert("All fields are required!");
             return false;
         }
-        if(formData.password !== formData.confirmPassword) {
+        if (formData.password !== formData.confirmPassword) {
             alert("Passwords do not match!");
             return false;
         }
         return true;
+    };
 
-    }
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -67,31 +61,77 @@ const Register = () => {
 
                         {/* Full Name */}
                         <div className="form-floating mb-3">
-                            <input onChange={handleChange} value={formData.username} name="username" type="text" className="form-control" id="fullName" placeholder="John Doe" />
+                            <input
+                                onChange={handleChange}
+                                value={formData.username}
+                                name="username"
+                                type="text"
+                                className="form-control"
+                                id="fullName"
+                                placeholder="John Doe"
+                            />
                             <label htmlFor="fullName">Username</label>
                         </div>
 
-                       
-
                         {/* Email */}
                         <div className="form-floating mb-3">
-                            <input onChange={handleChange} value={formData.email} name="email" type="email" className="form-control" id="email" placeholder="name@example.com" />
+                            <input
+                                onChange={handleChange}
+                                value={formData.email}
+                                name="email"
+                                type="email"
+                                className="form-control"
+                                id="email"
+                                placeholder="name@example.com"
+                            />
                             <label htmlFor="email">Email Address</label>
                         </div>
 
                         {/* Password */}
                         <div className="form-floating mb-3">
-                            <input name="password" value={formData.password} onChange={handleChange} type="password" className="form-control" id="password" placeholder="Password" />
+                            <input
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                                type="password"
+                                className="form-control"
+                                id="password"
+                                placeholder="Password"
+                            />
                             <label htmlFor="password">Password</label>
                         </div>
 
                         {/* Confirm Password */}
                         <div className="form-floating mb-3">
-                            <input name="confirmPassword" onChange={handleChange} value={formData.confirmPassword} type="password" className="form-control" id="confirmPassword" placeholder="Confirm Password" />
+                            <input
+                                name="confirmPassword"
+                                onChange={handleChange}
+                                value={formData.confirmPassword}
+                                type="password"
+                                className="form-control"
+                                id="confirmPassword"
+                                placeholder="Confirm Password"
+                            />
                             <label htmlFor="confirmPassword">Confirm Password</label>
                         </div>
 
-                        
+                        {/* Role Dropdown */}
+                        <div className="form-floating mb-3">
+                            <select
+                                name="role"
+                                className="form-select"
+                                value={formData.role}
+                                onChange={handleChange}
+                                id="role"
+                                required
+                            >
+                                <option value="">Select Role</option>
+                                <option value="patient">Patient</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <label htmlFor="role">Register as</label>
+                        </div>
+
                         {/* Checkbox */}
                         <div className="form-check text-start my-3">
                             <input className="form-check-input" type="checkbox" value="remember-me" id="checkDefault" />
@@ -101,16 +141,20 @@ const Register = () => {
                         </div>
 
                         {/* Buttons */}
-                        <button className="btn btn-primary w-100 py-2 mb-2" >
+                        <button className="btn btn-primary w-100 py-2 mb-2">
                             Register
                         </button>
 
-                        <button className="btn btn-outline-secondary w-100 py-2" type="button" onClick={() => navigate('/')}>
+                        <button
+                            className="btn btn-outline-secondary w-100 py-2"
+                            type="button"
+                            onClick={() => navigate('/')}
+                        >
                             Already have an account? Login
                         </button>
-                        <br/>
-                        <br/>
-                        <br/>
+                        <br />
+                        <br />
+                        <br />
                     </form>
                 </div>
             </div>
