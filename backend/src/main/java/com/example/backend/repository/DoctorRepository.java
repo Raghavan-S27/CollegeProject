@@ -19,4 +19,6 @@ public interface DoctorRepository extends JpaRepository<DoctorEntity,Long> {
     "lower(d.email) like lower(concat('%',:keyword,'%')) or "+
     "lower(d.specialization) like lower(concat('%',:keyword,'%'))")
     List<DoctorEntity> searchDoctors(String keyword);
+
+    DoctorEntity findByEmail(String currentlyLoggedInDoctor);
 }
