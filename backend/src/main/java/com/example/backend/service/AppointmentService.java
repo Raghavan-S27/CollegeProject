@@ -26,14 +26,6 @@ public class AppointmentService {
     @Autowired
     UserRepository userRepository;
 
-//    public List<AppointmentEntity> fetchAppointments(DoctorEntity doctorDetails) {
-//        DoctorEntity DoctorByDept=doctorRepository.findByNameAndSpecialization
-//                (doctorDetails.getName(),doctorDetails.getSpecialization());
-//
-//        List<AppointmentEntity> doctorInAppointment=appointmentRepo.findByDoctor(DoctorByDept);
-//        return doctorInAppointment;
-//    }
-
 
     public void saveAppointments(String doctorName,AppointmentEntity appointmentData) {
 
@@ -58,12 +50,13 @@ public class AppointmentService {
         return appointmentRepo.findByUser(user);
     }
 
-//    public List<AppointmentEntity> fetchAppointments(AppointmentEntity appointment) {
-//
-//        UserEntity doctor =appointment.getDoctor();
-//
-//        List<AppointmentEntity>appointmentByDoctor=appointmentRepo.findByDoctor(doctor);
-//
-//        return appointmentByDoctor;
-//    }
+    public List<AppointmentEntity> fetchAppointmentsTime(AppointmentEntity appointment) {
+
+        DoctorEntity doctor=appointment.getDoctor();
+        String date=appointment.getDate();
+
+        return appointmentRepo.findByDoctorAndDate(doctor,date);
+
+    }
+
 }
