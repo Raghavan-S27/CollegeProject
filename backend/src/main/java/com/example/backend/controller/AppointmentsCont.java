@@ -30,4 +30,10 @@ public class AppointmentsCont {
     {
         appointmentService.saveAppointments(doctorname,appointmentData);
     }
+
+    @GetMapping("/fetchappliedusers")
+    public List<AppointmentEntity> getAppliedUser()
+    {
+        return appointmentService.getAppliedUserDetails();
+    }
 }

@@ -38,11 +38,24 @@ public class AppointmentService {
     public void saveAppointments(String doctorName,AppointmentEntity appointmentData) {
 
         DoctorEntity doctor = doctorRepository.findByName(doctorName);
-        System.out.println();
-        System.out.println(doctor);
-        appointmentData.setDoctor(doctor);
 
+        appointmentData.setDoctor(doctor);
+        String loggedInUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+
+
+        UserEntity appliedUser = userRepository.findByEmail(loggedInUsername);
+
+
+        appointmentData.setUser(appliedUser);
         appointmentRepo.save(appointmentData);
+    }
+
+    public List<AppointmentEntity> getAppliedUserDetails() {
+
+        String currentlyLoggedInUser=SecurityContextHolder.getContext().getAuthentication().getName();
+
+        UserEntity user=userRepository.findByEmail(currentlyLoggedInUser);
+        return appointmentRepo.findByUser(user);
     }
 
 //    public List<AppointmentEntity> fetchAppointments(AppointmentEntity appointment) {

@@ -21,5 +21,7 @@ public class AppointmentEntity {
     @JoinColumn(name = "doctor_id")
     private DoctorEntity doctor;
 
-
+    @ManyToOne
+    @JoinColumn(name = "applied_userid")
+    private UserEntity user;
 }
