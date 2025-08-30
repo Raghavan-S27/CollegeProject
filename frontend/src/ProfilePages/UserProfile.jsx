@@ -25,7 +25,6 @@ const UserProfile = () => {
         age: 18,
         gender: "Male",
         bloodGroup: "O+",
-        
     });
 
     const [formData, setFormData] = useState(user);
@@ -45,6 +44,7 @@ const UserProfile = () => {
         saveUserProfile(formData)
             .then((res) => {
                 console.log("Profile updated:", res);
+                setUser(formData); // update UI immediately
                 setShowEdit(false);
             })
             .catch((err) => {
@@ -58,7 +58,7 @@ const UserProfile = () => {
         { date: "2025-08-15", doctor: "Dr. Michael Chen", dept: "Neurology", status: "Completed" },
     ];
 
-   const fetchUserProfile = () => {
+    const fetchUserProfile = () => {
         getUserProfile()
             .then((res) => {
                 setUser(res.data);
@@ -66,10 +66,12 @@ const UserProfile = () => {
             .catch((err) => {
                 console.error("Error fetching user profile:", err);
             });
-    }
+    };
+
     useEffect(() => {
         fetchUserProfile();
-}, []);
+    }, []);
+
     return (
         <div className="container mt-4 user-profile-container">
             <div className="profile-header text-center">
@@ -161,6 +163,7 @@ const UserProfile = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
                             <Form.Control
@@ -170,6 +173,7 @@ const UserProfile = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Phone</Form.Label>
                             <Form.Control
@@ -179,6 +183,7 @@ const UserProfile = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Age</Form.Label>
                             <Form.Control
@@ -188,6 +193,7 @@ const UserProfile = () => {
                                 onChange={handleChange}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label>Gender</Form.Label>
                             <Form.Select
@@ -198,6 +204,26 @@ const UserProfile = () => {
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Other</option>
+                            </Form.Select>
+                        </Form.Group>
+
+                        {/* ✅ Added Blood Group field */}
+                        <Form.Group className="mb-3">
+                            <Form.Label>Blood Group</Form.Label>
+                            <Form.Select
+                                name="bloodGroup"
+                                value={formData.bloodGroup}
+                                onChange={handleChange}
+                            >
+                                <option value="">Select Blood Group</option>
+                                <option>O+</option>
+                                <option>O-</option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
                             </Form.Select>
                         </Form.Group>
                     </Form>
