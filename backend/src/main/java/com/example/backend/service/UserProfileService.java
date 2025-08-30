@@ -22,7 +22,7 @@ public class UserProfileService {
 //    }
 
 
-    public void updateUserProfile(UserProfileEntity userProfile) {
+    public UserProfileEntity updateUserProfile(UserProfileEntity userProfile) {
         UserProfileEntity existing = userProfileRepo.findById(userProfile.getId())
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
@@ -38,6 +38,8 @@ public class UserProfileService {
         UserEntity user = existing.getUser();
         user.setEmail(userProfile.getEmail());
         userRepository.save(user);
+
+        return existing;
     }
 
     public void createProfile(String email, String username) {

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
     Card,
@@ -15,11 +16,8 @@ import "../CSSFolder/userprofile.css";
 
 const UserProfile = () => {
     const [showEdit, setShowEdit] = useState(false);
-
-    const handleEditProfile = () => setShowEdit(true);
-    const handleClose = () => setShowEdit(false);
-
-    const user = {
+    const [user, setUser] = useState({
+        id: 1,
         name: "Raghavan",
         email: "raghavan@example.com",
         phone: "1111",
@@ -29,39 +27,53 @@ const UserProfile = () => {
         allergies: "no",
         conditions: "jojo",
         medications: "[olpo",
+    });
+
+    const [formData, setFormData] = useState(user);
+
+    const handleEditProfile = () => {
+        setFormData(user); // reset form with latest user data
+        setShowEdit(true);
+    };
+    const handleClose = () => setShowEdit(false);
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSave = () => {
+        axios
+            .put("http://localhost:8080/api/hospital/updateuserprofile", formData)
+            .then((res) => {
+                alert("Profile updated successfully!");
+                setUser(res.data);
+                setShowEdit(false);
+            })
+            .catch((err) => {
+                console.error("Error updating profile:", err);
+                alert("Failed to update profile.");
+            });
     };
 
     const appointments = [
-        {
-            date: "2025-09-01",
-            doctor: "Dr. Sarah Johnson",
-            dept: "Cardiology",
-            status: "Upcoming",
-        },
-        {
-            date: "2025-08-15",
-            doctor: "Dr. Michael Chen",
-            dept: "Neurology",
-            status: "Completed",
-        },
+        { date: "2025-09-01", doctor: "Dr. Sarah Johnson", dept: "Cardiology", status: "Upcoming" },
+        { date: "2025-08-15", doctor: "Dr. Michael Chen", dept: "Neurology", status: "Completed" },
     ];
 
     return (
         <div className="container mt-4 user-profile-container">
-            {/* Stylish Header */}
             <div className="profile-header text-center">
                 <h2>👤 User Profile</h2>
                 <p>Manage your personal information and health records</p>
             </div>
 
             <Row className="g-4">
-                {/* Personal Info */}
                 <Col md={6}>
                     <Card className="info-card">
                         <Card.Body>
                             <h5 className="section-title">
-                                <FaEdit className="me-2" />
-                                Personal Info
+                                <FaEdit className="me-2" /> Personal Info
                             </h5>
                             <p><strong>Name:</strong> {user.name}</p>
                             <p><strong>Email:</strong> {user.email}</p>
@@ -76,13 +88,11 @@ const UserProfile = () => {
                     </Card>
                 </Col>
 
-                {/* Medical Info */}
                 <Col md={6}>
                     <Card className="info-card">
                         <Card.Body>
                             <h5 className="section-title">
-                                <FaHeartbeat className="me-2" />
-                                Medical Info
+                                <FaHeartbeat className="me-2" /> Medical Info
                             </h5>
                             <p><strong>Allergies:</strong> {user.allergies}</p>
                             <p><strong>Conditions:</strong> {user.conditions}</p>
@@ -92,12 +102,10 @@ const UserProfile = () => {
                 </Col>
             </Row>
 
-            {/* Appointments */}
             <Card className="mt-4 shadow-sm">
                 <Card.Body>
                     <h5 className="section-title">
-                        <FaCalendarAlt className="me-2" />
-                        My Appointments
+                        <FaCalendarAlt className="me-2" /> My Appointments
                     </h5>
                     <Table hover responsive className="appointment-table">
                         <thead>
@@ -137,23 +145,47 @@ const UserProfile = () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Full Name</Form.Label>
-                            <Form.Control type="text" defaultValue={user.name} />
+                            <Form.Control
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleChange}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
-                            <Form.Control type="email" defaultValue={user.email} />
+                            <Form.Control
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Phone</Form.Label>
-                            <Form.Control type="text" defaultValue={user.phone} />
+                            <Form.Control
+                                type="text"
+                                name="phone"
+                                value={formData.phone}
+                                onChange={handleChange}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Age</Form.Label>
-                            <Form.Control type="number" defaultValue={user.age} />
+                            <Form.Control
+                                type="number"
+                                name="age"
+                                value={formData.age}
+                                onChange={handleChange}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>Gender</Form.Label>
-                            <Form.Select defaultValue={user.gender}>
+                            <Form.Select
+                                name="gender"
+                                value={formData.gender}
+                                onChange={handleChange}
+                            >
                                 <option>Male</option>
                                 <option>Female</option>
                                 <option>Other</option>
@@ -165,7 +197,7 @@ const UserProfile = () => {
                     <Button variant="secondary" onClick={handleClose}>
                         Cancel
                     </Button>
-                    <Button className="btn-edit" onClick={handleClose}>
+                    <Button className="btn-edit" onClick={handleSave}>
                         Save Changes
                     </Button>
                 </Modal.Footer>

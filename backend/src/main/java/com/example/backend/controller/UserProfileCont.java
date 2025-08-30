@@ -20,8 +20,10 @@ public class UserProfileCont {
 //    }
 
     @PutMapping("/updateuserprofile")
-    public void updateUserProfileDetails(@RequestBody UserProfileEntity userProfile)
+    public UserProfileEntity updateUserProfileDetails(@RequestBody UserProfileEntity userProfile)
     {
-        userProfileService.updateUserProfile(userProfile);
+        return userProfileService.updateUserProfile(userProfile);
     }
+
+
 }
