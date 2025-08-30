@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import {
@@ -13,6 +13,7 @@ import {
 } from "react-bootstrap";
 import { FaEdit, FaCalendarAlt, FaHeartbeat } from "react-icons/fa";
 import "../CSSFolder/userprofile.css";
+import { getUserProfile, saveUserProfile } from "../Services/Service";
 
 const UserProfile = () => {
     const [showEdit, setShowEdit] = useState(false);
@@ -24,9 +25,7 @@ const UserProfile = () => {
         age: 18,
         gender: "Male",
         bloodGroup: "O+",
-        allergies: "no",
-        conditions: "jojo",
-        medications: "[olpo",
+        
     });
 
     const [formData, setFormData] = useState(user);
@@ -43,16 +42,14 @@ const UserProfile = () => {
     };
 
     const handleSave = () => {
-        axios
-            .put("http://localhost:8080/api/hospital/updateuserprofile", formData)
+        saveUserProfile(formData)
             .then((res) => {
-                alert("Profile updated successfully!");
-                setUser(res.data);
+                console.log("Profile updated:", res);
                 setShowEdit(false);
             })
             .catch((err) => {
                 console.error("Error updating profile:", err);
-                alert("Failed to update profile.");
+                alert("Failed to update profile. Please try again.");
             });
     };
 
@@ -61,6 +58,18 @@ const UserProfile = () => {
         { date: "2025-08-15", doctor: "Dr. Michael Chen", dept: "Neurology", status: "Completed" },
     ];
 
+   const fetchUserProfile = () => {
+        getUserProfile()
+            .then((res) => {
+                setUser(res.data);
+            })
+            .catch((err) => {
+                console.error("Error fetching user profile:", err);
+            });
+    }
+    useEffect(() => {
+        fetchUserProfile();
+}, []);
     return (
         <div className="container mt-4 user-profile-container">
             <div className="profile-header text-center">

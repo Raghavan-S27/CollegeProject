@@ -5,6 +5,8 @@ import com.example.backend.entity.UserProfileEntity;
 import com.example.backend.repository.UserProfileRepo;
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,7 +24,7 @@ public class UserProfileService {
 //    }
 
 
-    public UserProfileEntity updateUserProfile(UserProfileEntity userProfile) {
+    public void updateUserProfile(UserProfileEntity userProfile) {
         UserProfileEntity existing = userProfileRepo.findById(userProfile.getId())
                 .orElseThrow(() -> new RuntimeException("Profile not found"));
 
@@ -37,9 +39,10 @@ public class UserProfileService {
 
         UserEntity user = existing.getUser();
         user.setEmail(userProfile.getEmail());
+        user.setUsername(userProfile.getName());
         userRepository.save(user);
 
-        return existing;
+
     }
 
     public void createProfile(String email, String username) {
@@ -54,5 +57,14 @@ public class UserProfileService {
         profile.setEmail(email);
 
         userProfileRepo.save(profile);
+    }
+
+    public UserProfileEntity fetchUserProfile() {
+
+        String CurrentlyLoggedInUser= SecurityContextHolder.getContext().getAuthentication().getName();
+
+        UserProfileEntity user=userProfileRepo.findByEmail(CurrentlyLoggedInUser);
+
+        return user;
     }
 }

@@ -94,3 +94,17 @@ export const deletePatient = async (patientId) => {
 export const userProfile = (profileDetails) => {
     return axios.post(`${API_BASE_URL}/userprofiledetails`,profileDetails, authHeaders());
 }
+
+export const saveUserProfile = async (profileData) => {
+    try {
+        const response = await axios.put(`${API_BASE_URL}/updateuserprofile`, profileData, authHeaders());
+        return response.data;
+    } catch (error) {
+        console.error("Error updating user profile:", error);
+        throw error;
+    }
+}
+
+export const getUserProfile = () => {
+    return axios.get(`${API_BASE_URL}/getuserprofile`, authHeaders());
+}
