@@ -11,7 +11,7 @@ const FeaturedDoctors = () => {
         getDoctorDetails()
             .then((resp) => {
                 setDoctors(resp.data);
-                console.log(resp);
+                console.log(resp.data);
             })
             .catch((err) => {
                 console.log(err);
@@ -36,21 +36,23 @@ const FeaturedDoctors = () => {
                                     </svg>
                                 </div>
 
-                                <h3 className="doctor-name fw-bold">{doctor.name}</h3>
-                                <p className="doctor-specialty text-primary">{doctor.specialty}</p>
-                                <p className="doctor-details">
-                                    <i className="bi bi-briefcase me-2"></i>
-                                    {doctor.experience} experience
+                                <h3 className="doctor-name fw-bold text-dark">{doctor.name}</h3>
+                                <p className="doctor-specialty text-uppercase fw-semibold text-primary mb-1">
+                                    {doctor.specialization}
                                 </p>
                                 <p className="doctor-details">
-                                    <i className="bi bi-mortarboard me-2"></i>
-                                    {doctor.education}
+                                    <i className="bi bi-briefcase me-2 text-secondary"></i>
+                                    <span className="fw-bold">{doctor.experienceYears} Years</span> Of Experience
+                                </p>
+                                <p className="doctor-details">
+                                    <i className="bi bi-mortarboard me-2 text-secondary"></i>
+                                    <span className="fw-bold">{doctor.degree}</span>
                                 </p>
 
+
                                 <div className="doctor-actions mt-3">
-                                    <button className="btn btn-outline-primary me-2">View Profile</button>
                                     <button
-                                        className="btn btn-primary"
+                                        className="btn btn-primary w-100"
                                         onClick={() => handleBookAppointment(doctor)}
                                     >
                                         Book Appointment

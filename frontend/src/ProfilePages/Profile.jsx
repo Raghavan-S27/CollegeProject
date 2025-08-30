@@ -210,32 +210,25 @@ const Profile = () => {
         </Row>
 
         {/* Dashboard Stats */}
-        <Row className="mb-4">
-          <Col md={4}>
-            <Card className="stat-card">
-              <Card.Body>
-                <h6>Total Doctors</h6>
-                <h3>{doctors.length}</h3>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={4}>
-            <Card className="stat-card">
-              <Card.Body>
-                <h6>Active Doctors</h6>
-                <h3>{doctors.filter((d) => d.status === "Active").length}</h3>
-              </Card.Body>
-            </Card>
-          </Col>
-          <Col md={4}>
-            <Card className="stat-card">
-              <Card.Body>
-                <h6>Departments</h6>
-                <h3>3</h3>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+          <Row className="mb-4 text-center">
+              <Col md={6}>
+                  <Card className="stat-card h-100">
+                      <Card.Body>
+                          <h6>Total Doctors</h6>
+                          <h3>{doctors.length}</h3>
+                      </Card.Body>
+                  </Card>
+              </Col>
+
+              <Col md={6}>
+                  <Card className="stat-card h-100">
+                      <Card.Body>
+                          <h6>Departments</h6>
+                          <h3>5</h3>
+                      </Card.Body>
+                  </Card>
+              </Col>
+          </Row>
 
         {/* Doctor List Table */}
         <Card className="shadow-sm doctor-table-card">
@@ -262,11 +255,7 @@ const Profile = () => {
                     </td>
 
                     <td className="text-center">
-                      <FaEye
-                        className="action-icon text-primary me-3"
-                        title="View"
-                        onClick={() => handleView(doc)}
-                      />
+
                       <FaEdit
                         className="action-icon text-success me-3"
                         title="Edit"

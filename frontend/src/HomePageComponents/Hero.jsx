@@ -24,7 +24,7 @@ const Hero = () => {
                     {/* Hero Image */}
                     <div className="col-10 col-sm-8 col-lg-6">
                         <img
-                            src="https://img.freepik.com/free-vector/medical-healthcare-background-with-doctor_1017-17602.jpg"
+                            src="https://sellbery.com/wp-content/uploads/2024/12/how-to-build-a-comprehensive-hospital-management.png"
                             className="d-block mx-lg-auto img-fluid rounded-4 shadow-lg"
                             alt="Healthcare illustration"
                             loading="lazy"

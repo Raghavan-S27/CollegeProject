@@ -11,8 +11,11 @@ import {
 } from "react-bootstrap";
 import { FaCalendarPlus, FaStethoscope, FaUserMd } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
+import {getDoctorDetails} from "../Services/Service.js";
 
 const Appointment = () => {
+    const [doctors, setDoctors] = useState([]);
+
     const location = useLocation();
     const prefilledDoctor = location.state?.doctor;
 
@@ -33,10 +36,18 @@ const Appointment = () => {
         if (prefilledDoctor) {
             setDetails((prev) => ({
                 ...prev,
-                department: prefilledDoctor.specialty || "",
+                department: prefilledDoctor.specialization || "",
                 doctor: prefilledDoctor.name || "",
             }));
         }
+        getDoctorDetails()
+            .then((resp) => {
+                setDoctors(resp.data);
+                console.log(resp.data);
+            })
+            .catch((err) => {
+                console.log(err);
+            });
     }, [prefilledDoctor]);
 
     const handleChange = (e) => {
@@ -175,10 +186,13 @@ const Appointment = () => {
                                     value={details.doctor}
                                 >
                                     <option value="">Choose...</option>
-                                    <option value="Dr. Sarah Johnson">Dr. Sarah Johnson</option>
-                                    <option value="Dr. Michael Chen">Dr. Michael Chen</option>
-                                    <option value="Dr. Emily Rodriguez">Dr. Emily Rodriguez</option>
+                                    {doctors.map((doc) => (
+                                        <option key={doc.id} value={doc.name}>
+                                            Dr.{doc.name}
+                                        </option>
+                                    ))}
                                 </Form.Select>
+
                             </Form.Group>
                         </Col>
                     </Row>
@@ -216,23 +230,24 @@ const Appointment = () => {
                     {availableSlots.length > 0 && (
                         <div className="mb-3">
                             <Form.Label className="fw-semibold">🕒 Select Time Slot</Form.Label>
-                            <div className="d-flex flex-wrap gap-3">
+                            <Form.Select
+                                required
+                                name="timeSlot"
+                                value={details.timeSlot}
+                                onChange={handleChange}
+                            >
+                                <option value="">Choose a time slot...</option>
                                 {availableSlots.map((slot) => {
-                                    const slotValue = `${slot.startTime} - ${slot.endTime}`;
+                                    const slotValue = `${slot.startTime} - ${slot.endTime}`; // stored value
                                     return (
-                                        <Form.Check
-                                            key={slot.id}
-                                            type="radio"
-                                            id={`slot-${slot.id}`}
-                                            label={slotValue}
-                                            name="timeSlot"
-                                            value={slotValue}
-                                            checked={details.timeSlot === slotValue}
-                                            onChange={handleChange}
-                                        />
+                                        <option key={slot.id} value={slotValue}>
+                                            {slot.startTime}
+                                        </option>
                                     );
                                 })}
-                            </div>
+                            </Form.Select>
+
+
                         </div>
                     )}
 
