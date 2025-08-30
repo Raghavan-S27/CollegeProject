@@ -90,3 +90,7 @@ export const deletePatient = async (patientId) => {
         throw error;
     }
 }
+
+export const userProfile = (profileDetails) => {
+    return axios.post(`${API_BASE_URL}/userprofiledetails`,profileDetails, authHeaders());
+}

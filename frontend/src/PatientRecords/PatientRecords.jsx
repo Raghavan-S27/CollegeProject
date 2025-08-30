@@ -10,7 +10,7 @@ import {
 import { FaUserInjured, FaPlus, FaEdit, FaTrash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "../CSSFolder/patientRecords.css";
-import { getPatientRecords, savePatientRecords } from "../Services/Service";
+import { deletePatient, getPatientRecords, savePatientRecords } from "../Services/Service";
 import { format } from "date-fns";
 
 const PatientRecords = () => {
@@ -74,7 +74,14 @@ const PatientRecords = () => {
     // Delete Patient
     const handleDelete = (id) => { 
         if (window.confirm("Are you sure you want to delete this patient?")) {
-           
+           deletePatient(id)
+            .then(() => {
+               fetchPatientRecords();
+            })
+            .catch((err) => {
+                console.error("Error deleting patient:", err);
+                alert("Failed to delete patient. Please try again.");
+            });
         }
     };
 
@@ -107,15 +114,20 @@ const PatientRecords = () => {
         }));
     };
 
+    const fetchPatientRecords = () => {
+        
+            getPatientRecords()
+                .then((resp) => {
+                    console.log("Patient records fetched:", resp.data);
+                    setPatients(resp.data);
+                })
+                .catch((err) => {
+                    console.error("Error fetching patient records:", err);
+                });
+
+        }
     useEffect(() => {
-        getPatientRecords()
-            .then((resp) => {
-                console.log("Patient records fetched:", resp.data);
-                setPatients(resp.data);
-            })
-            .catch((err) => {
-                console.error("Error fetching patient records:", err);
-            });
+        fetchPatientRecords();
     }, []);
 
     return (

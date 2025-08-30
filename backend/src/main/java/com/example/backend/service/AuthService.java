@@ -20,9 +20,13 @@ public class AuthService {
     @Autowired
     JwtService jwtService;
 
+    @Autowired
+    UserProfileService userProfileService;
+
     public void registerUser(UserEntity userDetails) {
 
-        authRepository.save(userDetails);
+        UserEntity savedUser=authRepository.save(userDetails);
+        userProfileService.createProfile(savedUser.getEmail(),savedUser.getUsername());
     }
 
     public String loginUser(UserEntity user) {
