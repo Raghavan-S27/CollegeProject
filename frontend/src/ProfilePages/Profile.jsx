@@ -172,7 +172,7 @@ const Profile = () => {
         )
         :
       
-      <div className="container mt-4 profile-container">
+      <div className="container my-4 profile-container">
         {/* Stylish Header */}
         <div className="profile-header text-center">
           <h2>👨‍⚕️ Doctor Management</h2>

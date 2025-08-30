@@ -138,7 +138,7 @@ const Appointment = () => {
     const maxDate = maxDateObj.toISOString().split("T")[0];
 
     return (
-        <div className="container mt-5 book-appointment-container">
+        <div className="container my-5 book-appointment-container">
             {/* Header */}
             <div className="appointment-header text-center mb-4">
                 <h2 className="fw-bold text-primary">

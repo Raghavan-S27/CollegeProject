@@ -27,7 +27,7 @@ const FeaturedDoctors = () => {
             <div className="container">
                 <h2 className="section-title text-center mb-5">Our Featured Doctors</h2>
                 <div className="row">
-                    {doctors.map((doctor, index) => (
+                    {doctors.slice(0,3).map((doctor, index) => (
                         <div key={index} className="col-lg-4 col-md-6 mb-4">
                             <div className="doctor-card p-4 shadow-lg rounded-4 h-100 text-center">
                                 <div className="doctor-img mb-3">

@@ -10,6 +10,9 @@ import Appointment from "./Appointments/Appointment.jsx";
 import Billing from "./Billing/Billing.jsx";
 import NavBar from "./HomePageComponents/NavBar.jsx";
 import FeaturedDoctors from "./HomePageComponents/FeaturedDoctors.jsx";
+import Footer from "./HomePageComponents/Footer.jsx";
+import Overview from "./Overview/Overview.jsx";
+import Doctor from "./Doctors/Doctor.jsx";
 const Navigation = () => {
   const location = useLocation();
   const path = location.pathname;
@@ -27,6 +30,7 @@ const Navigation = () => {
   return (
     <>
       <NavBar />
+
       <Routes>
         <Route path="/home" element={<HomePage />} />
         <Route path="/profile" element={<Profile />} />
@@ -34,8 +38,10 @@ const Navigation = () => {
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/patient" element={<PatientRecords />} />
         <Route path="/billing" element={<Billing />} />
-        <Route path="/doctors" element={<FeaturedDoctors />} />
+        <Route path="/doctors" element={<Doctor />} />
+          <Route path="/overview" element={<Overview />} />
       </Routes>
+        <Footer />
     </>
   );
 };

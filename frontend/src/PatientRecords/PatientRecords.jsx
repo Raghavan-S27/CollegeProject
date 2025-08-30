@@ -28,6 +28,7 @@ const PatientRecords = () => {
         dob: "",
         address: "",
         diagnosis: "",
+        lastvisit: "",
     });
 
     // Open Modal in Add Mode
@@ -54,13 +55,13 @@ const PatientRecords = () => {
 
     // Save Patient (Add or Edit)
     const handleSave = () => {
-        const patientData = { ...newPatient, id: selectedId ?? undefined };
+        const patientData = {
+            ...newPatient,
+            id: selectedId ?? undefined
+        };
 
         savePatientRecords(patientData)
-            .then(() => {
-                // re-fetch latest records so we get `lastVisit` from backend
-                return getPatientRecords();
-            })
+            .then(() => getPatientRecords())
             .then((resp) => {
                 setPatients(resp.data);
                 handleClose();
@@ -70,6 +71,7 @@ const PatientRecords = () => {
                 alert("Failed to save patient. Please try again.");
             });
     };
+
 
     // Delete Patient
     const handleDelete = (id) => { 
@@ -96,9 +98,13 @@ const PatientRecords = () => {
             dob: patient.dob,
             address: patient.address,
             diagnosis: patient.diagnosis,
+            lastVisit: patient.lastVisit
+                ? format(new Date(patient.lastVisit), "yyyy-MM-dd")
+                : "" // prefill formatted date
         });
         setShowModal(true);
     };
+
 
     // Navigate to Billing with selected patient
     const handleGenerateBill = (patient) => {
@@ -131,7 +137,7 @@ const PatientRecords = () => {
     }, []);
 
     return (
-        <div className="container mt-5 patient-records-container">
+        <div className="container my-5 patient-records-container">
             {/* Header */}
             <div className="text-center mb-4">
                 <h2 className="fw-bold text-primary">
@@ -283,6 +289,18 @@ const PatientRecords = () => {
                                 required
                             />
                         </Form.Group>
+                        {editMode && (
+                            <Form.Group className="mb-2">
+                                <Form.Label>Last Visit</Form.Label>
+                                <Form.Control
+                                    type="date"
+                                    name="lastVisit"
+                                    value={newPatient.lastVisit}
+                                    onChange={handleChangePatient}
+                                />
+                            </Form.Group>
+                        )}
+
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
