@@ -137,9 +137,21 @@ export const getUserProfile = () => {
   return axios.get(`${API_BASE_URL}/getuserprofile`, authHeaders());
 };
 
-export const saveAppointment = async (appointmentData) => {
+export const saveAppointment = async (appointmentData,doctorname) => {
   try {
-    const response = await axios.post(`${API_BASE_URL}/saveappointments`,
+    const response = await axios.post(`${API_BASE_URL}/saveappointments/${doctorname}`,
+      appointmentData,
+      authHeaders()
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error saving appointment:", error);
+    throw error;
+  }
+};
+export const getAppointmentDetails = async (appointmentData) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/fetchappointments`,
       appointmentData,
       authHeaders()
     );

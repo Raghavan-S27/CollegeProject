@@ -8,6 +8,7 @@ import com.example.backend.repository.DoctorRepository;
 import com.example.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.print.Doc;
@@ -34,13 +35,22 @@ public class AppointmentService {
 //    }
 
 
-    public void saveAppointments(AppointmentEntity appointmentData) {
+    public void saveAppointments(String doctorName,AppointmentEntity appointmentData) {
 
-        String currentlyLoggedInDoctor= SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity currentDoctor= userRepository.findByEmail(currentlyLoggedInDoctor);
-        System.out.println("Doctor From backend:"+currentDoctor);
-        appointmentData.setDoctor(currentDoctor);
-        System.out.println("Doctor: "+appointmentData.getDoctor());
+        DoctorEntity doctor = doctorRepository.findByName(doctorName);
+        System.out.println();
+        System.out.println(doctor);
+        appointmentData.setDoctor(doctor);
+
         appointmentRepo.save(appointmentData);
     }
+
+//    public List<AppointmentEntity> fetchAppointments(AppointmentEntity appointment) {
+//
+//        UserEntity doctor =appointment.getDoctor();
+//
+//        List<AppointmentEntity>appointmentByDoctor=appointmentRepo.findByDoctor(doctor);
+//
+//        return appointmentByDoctor;
+//    }
 }

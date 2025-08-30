@@ -17,15 +17,17 @@ public class AppointmentsCont {
     AppointmentService appointmentService;
 
 //    @PostMapping("/fetchappointments")
-//    public List<AppointmentEntity> fetchAppointments(@RequestBody DoctorEntity doctorDetails)
+//    public List<AppointmentEntity> fetchAppointments(@RequestBody AppointmentEntity appointment)
 //    {
-//        return appointmentService.fetchAppointments(doctorDetails);
+//
+//        System.out.println("Details: "+appointmentService.fetchAppointments(appointment));
+//        return appointmentService.fetchAppointments(appointment);
 //    }
 
 
-    @PostMapping("/saveappointments")
-    public void SaveAppointments(@RequestBody AppointmentEntity appointmentData)
+    @PostMapping("/saveappointments/{doctorname}")
+    public void SaveAppointments(@PathVariable String doctorname,@RequestBody AppointmentEntity appointmentData)
     {
-        appointmentService.saveAppointments(appointmentData);
+        appointmentService.saveAppointments(doctorname,appointmentData);
     }
 }
