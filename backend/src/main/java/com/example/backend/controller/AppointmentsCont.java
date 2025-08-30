@@ -16,13 +16,12 @@ public class AppointmentsCont {
     @Autowired
     AppointmentService appointmentService;
 
-//    @PostMapping("/fetchappointments")
-//    public List<AppointmentEntity> fetchAppointments(@RequestBody AppointmentEntity appointment)
-//    {
-//
-//        System.out.println("Details: "+appointmentService.fetchAppointments(appointment));
-//        return appointmentService.fetchAppointments(appointment);
-//    }
+    @PostMapping("/fetchappointmentstime")
+    public List<AppointmentEntity> fetchAppointmentsTime(@RequestBody AppointmentEntity appointment)
+    {
+
+        return appointmentService.fetchAppointmentsTime(appointment);
+    }
 
 
     @PostMapping("/saveappointments/{doctorname}")
