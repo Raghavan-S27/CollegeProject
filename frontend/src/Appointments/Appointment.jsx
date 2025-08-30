@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { FaCalendarPlus, FaStethoscope, FaUserMd } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
-import {getDoctorDetails} from "../Services/Service.js";
+import {getDoctorDetails, saveAppointment} from "../Services/Service.js";
 
 const Appointment = () => {
     const [doctors, setDoctors] = useState([]);
@@ -28,7 +28,7 @@ const Appointment = () => {
         doctor: "",
         date: "",
         reason: "",
-        timeSlot: "",
+        startTime: "",
     });
 
     // Prefill if doctor was passed
@@ -103,20 +103,13 @@ const Appointment = () => {
 
     const handleBook = (e) => {
         e.preventDefault();
-        if (!details.timeSlot) {
+        if (!details.startTime) {
             alert("Please select a time slot before booking.");
             return;
         }
 
         // Save booked slot under the selected date
-        const [startTime, endTime] = details.timeSlot.split(" - ");
-        setBookedSlots((prev) => {
-            const existing = prev[details.date] || [];
-            return {
-                ...prev,
-                [details.date]: [...existing, { startTime, endTime }],
-            };
-        });
+        
 
         setShowSuccess(true);
 
@@ -126,10 +119,17 @@ const Appointment = () => {
             doctor: "",
             date: "",
             reason: "",
-            timeSlot: "",
+            startTime: "",
         });
         setAvailableSlots([]);
     };
+
+    const handleBookAppointment = () => {
+        const { doctor, ...appointmentData } = details;
+        console.log("AppointmentsData:",appointmentData);
+        saveAppointment(appointmentData);
+        alert("Appointment booked successfully!");
+    }
 
     const today = new Date();
     const minDate = today.toISOString().split("T")[0];
@@ -232,13 +232,13 @@ const Appointment = () => {
                             <Form.Label className="fw-semibold">🕒 Select Time Slot</Form.Label>
                             <Form.Select
                                 required
-                                name="timeSlot"
-                                value={details.timeSlot}
+                                name="startTime"
+                                value={details.startTime}
                                 onChange={handleChange}
                             >
                                 <option value="">Choose a time slot...</option>
                                 {availableSlots.map((slot) => {
-                                    const slotValue = `${slot.startTime} - ${slot.endTime}`; // stored value
+                                    const slotValue = `${slot.startTime}`; // stored value
                                     return (
                                         <option key={slot.id} value={slotValue}>
                                             {slot.startTime}
@@ -265,7 +265,7 @@ const Appointment = () => {
                     </Form.Group>
 
                     <div className="text-center">
-                        <Button type="submit" className="btn-book px-4 py-2 fw-semibold">
+                        <Button onClick={handleBookAppointment} type="submit" className="btn-book px-4 py-2 fw-semibold">
                             Confirm Appointment
                         </Button>
                     </div>

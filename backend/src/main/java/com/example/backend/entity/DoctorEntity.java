@@ -28,4 +28,6 @@ public class DoctorEntity {
     private LocalDateTime DateofJoining;
 
 
+
+
 }
