@@ -11,7 +11,7 @@ import {
 } from "react-bootstrap";
 import { FaCalendarPlus, FaStethoscope, FaUserMd } from "react-icons/fa";
 import "../CSSFolder/appointments.css";
-import {getDoctorDetails, saveAppointment} from "../Services/Service.js";
+import {getAppointmentDetails, getDoctorDetails, saveAppointment} from "../Services/Service.js";
 
 const Appointment = () => {
     const [doctors, setDoctors] = useState([]);
@@ -80,12 +80,21 @@ const Appointment = () => {
         return slots;
     };
 
+    // const [timeslots,setTimeSlots]=useState();
     // Check availability (frontend only)
-    const handleCheckAvailability = () => {
+    const handleCheckAvailability = async () => {
         if (!details.doctor || !details.department || !details.date) {
             alert("Please select doctor, department, and date first.");
             return;
         }
+
+//          try {
+//             const data = await getAppointmentDetails(details); // wait for API response
+//             console.log("Fetched appointments:", data);
+//             setTimeSlots(data);
+//   } catch (err) {
+//     console.error("Error fetching appointment details:", err);
+//   }
 
         const allSlots = generateSlots();
         const bookedForDate = bookedSlots[details.date] || [];
@@ -123,12 +132,18 @@ const Appointment = () => {
         });
         setAvailableSlots([]);
     };
-
+ 
     const handleBookAppointment = () => {
         const { doctor, ...appointmentData } = details;
         console.log("AppointmentsData:",appointmentData);
-        saveAppointment(appointmentData);
+        saveAppointment(appointmentData,details.doctor);
         alert("Appointment booked successfully!");
+    }
+
+    const getDoctorAppointments = () =>
+    {
+       const response= getAppointmentDetails();
+       console.log(response.data);
     }
 
     const today = new Date();
