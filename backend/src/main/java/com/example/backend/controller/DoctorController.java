@@ -40,4 +40,16 @@ public class DoctorController {
     {
         doctorService.deleteDoctorDetails(id);
     }
+
+    @PostMapping("/doctorbyspecialization/{specialization}")
+    public List<DoctorEntity> fetchDoctorsBySpl(@PathVariable String specialization)
+    {
+        return doctorService.fetchDoctorsBySpl(specialization);
+    }
+
+    @PostMapping("/searchdoctors/{keyword}")
+    public List<DoctorEntity> searchDoctorDetails(@PathVariable String keyword)
+    {
+        return doctorService.searchDoctors(keyword);
+    }
 }

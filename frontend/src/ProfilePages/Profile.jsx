@@ -5,14 +5,17 @@ import { FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import "../CSSFolder/profile.css";
 import {
   deleteDoctor,
+  fetchDoctorsBySpecialization,
   getDoctorDetails,
-  saveDoctorDetails, // for now we reuse this for both add/edit
+  saveDoctorDetails,
+  searchDoctors, // for now we reuse this for both add/edit
 } from "../Services/Service";
 import UserProfile from "./UserProfile";
 
 const Profile = () => {
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false); // ✅ Track Add/Edit mode
+  const [specialization, setSpecialization] = useState("All Departments");
 
   const [doctors, setDoctors] = useState([]);
   const [doctorDetails, setDoctorDetails] = useState({
@@ -48,6 +51,7 @@ const Profile = () => {
   const handleEdit = (doctor) => {
     setEditMode(true); // ✅ Edit mode
     setDoctorDetails({
+      id : doctor.id || "",
       name: doctor.name || "",
       specialization: doctor.specialization || "",
       email: doctor.email || "",
@@ -64,7 +68,7 @@ const Profile = () => {
       deleteDoctor(doctor.id)
         .then((resp) => {
           console.log("Doctor deleted:", resp);
-          fetchDoctorsData();
+          fetchDoctorsData(specialization);
         })
         .catch((err) => {
           console.error("Error deleting doctor:", err);
@@ -96,7 +100,7 @@ const Profile = () => {
             : "Doctor added successfully!"
         );
         handleClose();
-        fetchDoctorsData();
+        fetchDoctorsData(specialization);
       })
       .catch((err) => {
         console.error("Error saving doctor details:", err);
@@ -108,20 +112,57 @@ const Profile = () => {
       });
   };
 
-  const fetchDoctorsData = () => {
-    getDoctorDetails()
+  const fetchDoctorsData = (spec) => {
+    if(spec==="All Departments")
+    {
+      getDoctorDetails()
+        .then((resp) => {
+          console.log(resp.data);
+          setDoctors(resp.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching doctor details:", err);
+        });
+    }
+    else
+    {
+      
+      fetchDoctorsBySpecialization(spec)
       .then((resp) => {
-        console.log(resp.data);
         setDoctors(resp.data);
+        console.log(resp.data);
       })
       .catch((err) => {
-        console.error("Error fetching doctor details:", err);
+        console.error("Error fetching filtered doctors:", err);
       });
+    // alert(`Filter by ${spec}`);
+    }
   };
 
+  const changingSpecialization = (e) => {
+    setSpecialization(e.target.value);
+  };
+
+  const handleSearch = (e) => {
+    const keyword = e.target.value.toLowerCase();
+    if(keyword==="")
+    {
+      fetchDoctorsData(specialization);
+      return;
+    }
+    searchDoctors(keyword)
+      .then((resp) => {
+        setDoctors(resp.data);
+        console.log(resp.data);
+      })
+      .catch((err) => {
+        console.error("Error searching doctors:", err);
+      });
+  }
+
   useEffect(() => {
-    fetchDoctorsData();
-  }, []);
+    fetchDoctorsData(specialization);
+  }, [specialization]);
 
   return (
     <div>
@@ -152,17 +193,18 @@ const Profile = () => {
           <Col md={6} className="mb-2">
             <Form.Control
               type="text"
+              onChange={handleSearch}
               placeholder="🔍 Search doctors by name, specialization, or email..."
             />
           </Col>
           <Col md={6}>
-            <Form.Select>
-              <option>All Departments</option>
-              <option>Cardiology</option>
-              <option>Neurology</option>
-              <option>Pediatrics</option>
-              <option>Orthopedics</option>
-              <option>Dermatology</option>
+            <Form.Select onChange={(e) => changingSpecialization(e)}>
+              <option value={"All Departments"}>All Departments</option>
+              <option value={"Cardiology"}>Cardiology</option>
+              <option value={"Neurology"}>Neurology</option>
+              <option value={"Pediatrics"}>Pediatrics</option>
+              <option value={"Orthopedics"}>Orthopedics</option>
+              <option value={"Dermatology"}>Dermatology</option>
             </Form.Select>
           </Col>
         </Row>
